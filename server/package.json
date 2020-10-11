@@ -1,0 +1,27 @@
+{
+  "name": "instagramclone_backend",
+  "version": "1.0.0",
+  "description": "Personal project showcasing my skills and knowledge on React, Redux and API handling with Nodejs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "React",
+    "Redux",
+    "Node.js",
+    "API",
+    "clone"
+  ],
+  "author": "Gilberto Davis",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^4.1.1",
+    "pg": "^8.4.0",
+    "sequelize": "^6.3.5"
+  }
+}
