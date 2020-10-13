@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import styles from './styles/Home.module.scss';
+
 import { AiFillFacebook, AiFillApple } from 'react-icons/ai';
 import { FaGooglePlay } from 'react-icons/fa';
 
 import { Form, Field, Input, Label, SubmitButton, Separator } from '../components/UI/Formulario';
 
 import Phones from '../images/phones-background.png';
+import image_1 from '../images/image-1.jpg';
+import image_2 from '../images/image-2.jpg';
+import image_3 from '../images/image-3.jpg';
+import image_4 from '../images/image-4.jpg';
+import image_5 from '../images/image-5.jpg';
 
 const HomeContainer = styled.div`
   width: 100%;
@@ -24,13 +30,29 @@ const Titulo = styled.h3`
   font-family: 'Grand Hotel', cursive;
 `;
 
-const Image = styled.img`
+const PhoneImage = styled.img`
   width: 100%;
   height: 618px;
 
   @media (max-width: 875px) {
     display: none;
   }
+`;
+
+const ImagesAnimationContainer = styled.div`
+  position: absolute;
+  margin: 9.9rem 0 0 15.1rem;
+
+  .AnimatedImage {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .showImage {
+      opacity: 1;
+    }
+
 `;
 
 const FooterContainer = styled.footer`
@@ -69,11 +91,53 @@ const FooterContainer = styled.footer`
 `;
 
 const Home = () => {
+
+  const images = [
+    { id: '1', src: image_1 },
+    { id: '2', src: image_2 },
+    { id: '3', src: image_3 },
+    { id: '4', src: image_4 },
+    { id: '5', src: image_5 }
+  ];
+
+  const [animation, setAnimation] = useState({
+    activeImage: 1
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimation(prevState => ({
+        ...animation,
+        activeImage: prevState.activeImage + 1
+      }));
+
+      if (animation.activeImage >= 4) {
+        return setAnimation({
+          activeImage: 1
+        });
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [animation]);
+
   return (
     <div style={{ backgroundColor: '#fafafa', height: '100%' }}>
       <HomeContainer>
         <div className={styles.Home_Image_Container}>
-          <Image src={Phones} />
+          <ImagesAnimationContainer>
+            {images.map((image) =>
+              <img
+                key={image.id}
+                className="AnimatedImage"
+                alt="crossfading-images"
+                src={image.src}
+                style={{ opacity: Number(image.id) === animation.activeImage ? '1' : '0' }}
+              />
+            )}
+          </ImagesAnimationContainer>
+
+          <PhoneImage src={Phones} />
         </div>
 
         <div className={styles.Home_Form_Section_Container}>
