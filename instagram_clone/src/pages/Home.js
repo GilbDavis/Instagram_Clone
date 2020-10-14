@@ -21,12 +21,18 @@ const HomeContainer = styled.div`
   display: flex;
   justify-content: center;
   padding-bottom: 12rem;
+
+  @media (max-width: 875px) {
+    padding-top: 0;
+    padding-bottom: 7rem;
+  }
 `;
 
 const Titulo = styled.h3`
   font-size: 5rem;
   margin-top: 2rem;
   margin-bottom: 2rem;
+  color: #262626;
   font-family: 'Grand Hotel', cursive;
 `;
 
@@ -43,10 +49,14 @@ const ImagesAnimationContainer = styled.div`
   position: absolute;
   margin: 9.9rem 0 0 15.1rem;
 
+  @media (max-width: 875px) {
+    display: none;
+  }
+
   .AnimatedImage {
     position: absolute;
     opacity: 0;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 2s ease-in-out;
   }
 
   .showImage {
@@ -60,16 +70,28 @@ const FooterContainer = styled.footer`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 875px) {
+    flex-direction: column;
+  }
     
   ul {
       display: flex;
       flex-wrap: wrap;
+
+      @media (max-width: 875px) {
+      margin-bottom: 0;
+    }
 
       li {
         list-style-type: none;
         font-size: 1.2rem;
         text-transform: uppercase;
         margin-left: 2rem;
+
+        @media (max-width: 875px) {
+          margin-top: .7rem;
+        }
 
         &:nth-of-type(1) {
           margin-left: 0;
@@ -87,6 +109,10 @@ const FooterContainer = styled.footer`
     color: #8e8e8e;
     text-transform: uppercase;
     margin-left: 9rem;
+
+    @media (max-width: 875px) {
+      margin-left: 0;
+    }
   }
 `;
 
@@ -129,10 +155,9 @@ const Home = () => {
             {images.map((image) =>
               <img
                 key={image.id}
-                className="AnimatedImage"
+                className={`AnimatedImage ${Number(image.id) === animation.activeImage ? 'showImage' : ''}`}
                 alt="crossfading-images"
                 src={image.src}
-                style={{ opacity: Number(image.id) === animation.activeImage ? '1' : '0' }}
               />
             )}
           </ImagesAnimationContainer>
@@ -143,7 +168,7 @@ const Home = () => {
         <div className={styles.Home_Form_Section_Container}>
           <div className={styles.Home_Form_div}>
             <div>
-              <Titulo>Instagram</Titulo>
+              <Titulo>ClonStagram</Titulo>
             </div>
 
             <Form>
@@ -217,6 +242,7 @@ const Home = () => {
           <li><Link to="/">Ubicaciones</Link></li>
           <li><Link to="/">Cuentas Destacadas</Link></li>
           <li><Link to="/">Hashtags</Link></li>
+          <li><Link to="/">Idioma</Link></li>
         </ul>
 
         <h3>&copy; 2020 Instagram from Facebook</h3>
