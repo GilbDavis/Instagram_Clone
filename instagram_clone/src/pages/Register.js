@@ -1,68 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
-import styles from './styles/Home.module.scss';
+import styles from './styles/Register.module.scss';
 
 import { AiFillFacebook, AiFillApple } from 'react-icons/ai';
 import { FaGooglePlay } from 'react-icons/fa';
 
 import { Form, Field, Input, Label, SubmitButton, Separator } from '../components/UI/Formulario';
 
-import Phones from '../images/phones-background.png';
-import image_1 from '../images/image-1.jpg';
-import image_2 from '../images/image-2.jpg';
-import image_3 from '../images/image-3.jpg';
-import image_4 from '../images/image-4.jpg';
-import image_5 from '../images/image-5.jpg';
+const SeparatorExtended = styled(Separator)`
+  margin: 1.5rem 0;
+`;
 
 const HomeContainer = styled.div`
   width: 100%;
-  padding-top: 11rem;
+  padding-top: 0rem;
   display: flex;
   justify-content: center;
   padding-bottom: 12rem;
 
   @media (max-width: 875px) {
     padding-top: 0;
-    padding-bottom: 7rem;
+    padding-bottom: 2rem;
   }
 `;
 
 const Titulo = styled.h3`
   font-size: 5rem;
   margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   color: #262626;
   font-family: 'Grand Hotel', cursive;
 `;
 
-const PhoneImage = styled.img`
-  width: 100%;
-  height: 618px;
-
-  @media (max-width: 875px) {
-    display: none;
-  }
+const Description = styled.h3`
+  font-size: 1.7rem;
+  text-align: center;
+  padding:0 3rem;
+  margin-top: 0;
+  color: #8e8e8e;
 `;
 
-const ImagesAnimationContainer = styled.div`
-  position: absolute;
-  margin: 9.9rem 0 0 15.1rem;
-
-  @media (max-width: 875px) {
-    display: none;
-  }
-
-  .AnimatedImage {
-    position: absolute;
-    opacity: 0;
-    transition: opacity 2s ease-in-out;
-  }
-
-  .showImage {
-      opacity: 1;
-    }
-
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const FooterContainer = styled.footer`
@@ -70,6 +52,7 @@ const FooterContainer = styled.footer`
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: rgb(250, 250, 250);
 
   @media (max-width: 875px) {
     flex-direction: column;
@@ -116,60 +99,27 @@ const FooterContainer = styled.footer`
   }
 `;
 
-const Home = () => {
-
-  const images = [
-    { id: '1', src: image_1 },
-    { id: '2', src: image_2 },
-    { id: '3', src: image_3 },
-    { id: '4', src: image_4 },
-    { id: '5', src: image_5 }
-  ];
-
-  const [animation, setAnimation] = useState({
-    activeImage: 1
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setAnimation(prevState => ({
-        ...animation,
-        activeImage: prevState.activeImage + 1
-      }));
-
-      if (animation.activeImage >= 4) {
-        return setAnimation({
-          activeImage: 1
-        });
-      }
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [animation]);
-
+const Register = () => {
   return (
     <div style={{ backgroundColor: '#fafafa', height: '100%' }}>
       <HomeContainer>
-        <div className={styles.Image_Container}>
-          <ImagesAnimationContainer>
-            {images.map((image) =>
-              <img
-                key={image.id}
-                className={`AnimatedImage${Number(image.id) === animation.activeImage ? ' showImage' : ''}`}
-                alt="crossfading-images"
-                src={image.src}
-              />
-            )}
-          </ImagesAnimationContainer>
-
-          <PhoneImage src={Phones} />
-        </div>
-
         <div className={styles.Form_Section_Container}>
           <div className={styles.Form_div}>
-            <div>
+            <TitleContainer>
               <Titulo>ClonStagram</Titulo>
-            </div>
+              <Description>Regístrate para ver fotos y vídeos de tus amigos.</Description>
+
+              <Link className={styles.FacebookLink_Container} to="/">
+                <AiFillFacebook size="2rem" />
+                <span>Iniciar Sesión con Facebook</span>
+              </Link>
+            </TitleContainer>
+
+            <SeparatorExtended>
+              <div></div>
+              <div>o</div>
+              <div></div>
+            </SeparatorExtended>
 
             <Form>
               <Field>
@@ -178,7 +128,23 @@ const Home = () => {
                   name="correo"
                   required
                 />
-                <Label htmlFor="correo">Teléfono, usuario o correo electrónico</Label>
+                <Label htmlFor="correo">Numero de móvil o Correo electrónico</Label>
+              </Field>
+              <Field>
+                <Input
+                  type="text"
+                  name="name"
+                  required
+                />
+                <Label htmlFor="name">Nombre completo</Label>
+              </Field>
+              <Field>
+                <Input
+                  type="text"
+                  name="userName"
+                  required
+                />
+                <Label htmlFor="userName">Nombre de usuario</Label>
               </Field>
               <Field>
                 <Input
@@ -191,26 +157,20 @@ const Home = () => {
 
               <SubmitButton
                 type="submit"
-                value="Iniciar Sesión"
+                value="Registrarte"
               />
 
-              <Separator>
-                <div></div>
-                <div>o</div>
-                <div></div>
-              </Separator>
-
-              <Link className={styles.FacebookLink_Container} to="/">
-                <AiFillFacebook size="2rem" />
-                <span>Iniciar Sesión con Facebook</span>
-              </Link>
-
-              <Link to="/accounts/password/reset" className={styles.ResetPassLink}>¿Has olvidado la contraseña?</Link>
+              <div className={styles.ResetPassLink}>
+                <p>
+                  Al registrarte, aceptas nuestras <Link to="/accounts/signup">Condiciones</Link>,
+                  la <Link to="/accounts/signup">Política de datos</Link> y la <Link to="/accounts/signup">Política de cookies</Link>.
+                </p>
+              </div>
             </Form>
           </div>
 
           <div className={styles.NoAccount_Container}>
-            <p>¿No tienes una cuenta? <Link to="/accounts/signup">Regístrate</Link></p>
+            <p>¿Tienes una cuenta? <Link to="/">Entrar</Link></p>
           </div>
 
           <div className={styles.DownloadSection}>
@@ -251,4 +211,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Register;

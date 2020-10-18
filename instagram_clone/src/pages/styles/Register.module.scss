@@ -15,7 +15,6 @@
 
 .Form_div {
   border: 1px solid #e1e1e1;
-  height: 64%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,13 +27,18 @@
 }
 
 .FacebookLink_Container {
+  width: 74%;
+  height: 30px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   text-decoration: none;
-  color: #385185;
-  margin-top: 2.3rem;
+  color: #fff;
+  border-radius: 4px;
+
   font-weight: 700;
+  background-color: #0095f6;
 
   span {
     font-size: 1.4rem;
@@ -43,10 +47,28 @@
 }
 
 .ResetPassLink {
+  width: 75%;
   text-decoration: none;
   font-size: 1.2rem;
   margin-top: 2rem;
   color: #385185;
+  margin: 1rem 0 3rem 0;
+
+  p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #8e8e8e;
+
+    a {
+      text-decoration: none;
+      color: #8e8e8e;
+      font-weight: 700;
+
+      &:visited {
+        color: #00376b;
+      }
+    }
+  }
 }
 
 .NoAccount_Container {
@@ -61,7 +83,7 @@
   @media (max-width: 875px) {
     border: none;
     background-color: #fafafa;
-    margin-top: 6rem;
+    margin-top: 2rem;
   }
 
   p {
@@ -82,7 +104,7 @@
   align-items: center;
 
   @media (max-width: 875px) {
-    margin-top: 3.5rem;
+    margin-top: 1rem;
   }
 
   p {

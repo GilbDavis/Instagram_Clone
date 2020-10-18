@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 import Home from './pages/Home';
+import Register from './pages/Register';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Provider store={store}>
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/accounts/signup" component={Register} />
         </Switch>
       </Provider>
     </Router >
