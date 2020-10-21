@@ -5,8 +5,8 @@ import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 
-import Home from './pages/Home';
-import Register from './pages/Register';
+import Home from './pages/Home/index';
+import Register from './pages/Signup/index';
 
 function App() {
   return (

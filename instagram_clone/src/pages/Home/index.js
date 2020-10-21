@@ -1,120 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from '@emotion/styled';
-import styles from './styles/Home.module.scss';
 
 import { AiFillFacebook, AiFillApple } from 'react-icons/ai';
 import { FaGooglePlay } from 'react-icons/fa';
 
-import { Form, Field, Input, Label, SubmitButton, Separator } from '../components/UI/Formulario';
+import { Form, Field, Input, Label, SubmitButton, Separator } from '../../components/UI/Form';
+import {
+  HomeContainer,
+  Titulo,
+  PhoneImage,
+  ImagesAnimationContainer,
+  FooterContainer,
+  ImageContainer,
+  FormSectionContainer,
+  FormWrapper,
+  FacebookLinkContainer,
+  ResetPasswordLink,
+  NoAccountContainer,
+  DownloadSectionContainer
+} from './homeElements';
 
-import Phones from '../images/phones-background.png';
-import image_1 from '../images/image-1.jpg';
-import image_2 from '../images/image-2.jpg';
-import image_3 from '../images/image-3.jpg';
-import image_4 from '../images/image-4.jpg';
-import image_5 from '../images/image-5.jpg';
-
-const HomeContainer = styled.div`
-  width: 100%;
-  padding-top: 11rem;
-  display: flex;
-  justify-content: center;
-  padding-bottom: 12rem;
-
-  @media (max-width: 875px) {
-    padding-top: 0;
-    padding-bottom: 7rem;
-  }
-`;
-
-const Titulo = styled.h3`
-  font-size: 5rem;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  color: #262626;
-  font-family: 'Grand Hotel', cursive;
-`;
-
-const PhoneImage = styled.img`
-  width: 100%;
-  height: 618px;
-
-  @media (max-width: 875px) {
-    display: none;
-  }
-`;
-
-const ImagesAnimationContainer = styled.div`
-  position: absolute;
-  margin: 9.9rem 0 0 15.1rem;
-
-  @media (max-width: 875px) {
-    display: none;
-  }
-
-  .AnimatedImage {
-    position: absolute;
-    opacity: 0;
-    transition: opacity 2s ease-in-out;
-  }
-
-  .showImage {
-      opacity: 1;
-    }
-
-`;
-
-const FooterContainer = styled.footer`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @media (max-width: 875px) {
-    flex-direction: column;
-  }
-    
-  ul {
-      display: flex;
-      flex-wrap: wrap;
-
-      @media (max-width: 875px) {
-      margin-bottom: 0;
-    }
-
-      li {
-        list-style-type: none;
-        font-size: 1.2rem;
-        text-transform: uppercase;
-        margin-left: 2rem;
-
-        @media (max-width: 875px) {
-          margin-top: .7rem;
-        }
-
-        &:nth-of-type(1) {
-          margin-left: 0;
-        }
-        
-        a { 
-          text-decoration: none;
-          color: #00376b;
-        }
-      }
-  }
-
-  h3 {
-    font-size: 1.2rem;
-    color: #8e8e8e;
-    text-transform: uppercase;
-    margin-left: 9rem;
-
-    @media (max-width: 875px) {
-      margin-left: 0;
-    }
-  }
-`;
+import Phones from '../../images/phones-background.png';
+import image_1 from '../../images/image-1.jpg';
+import image_2 from '../../images/image-2.jpg';
+import image_3 from '../../images/image-3.jpg';
+import image_4 from '../../images/image-4.jpg';
+import image_5 from '../../images/image-5.jpg';
 
 const Home = () => {
 
@@ -148,9 +59,9 @@ const Home = () => {
   }, [animation]);
 
   return (
-    <div style={{ backgroundColor: '#fafafa', height: '100%' }}>
+    <>
       <HomeContainer>
-        <div className={styles.Image_Container}>
+        <ImageContainer>
           <ImagesAnimationContainer>
             {images.map((image) =>
               <img
@@ -163,10 +74,10 @@ const Home = () => {
           </ImagesAnimationContainer>
 
           <PhoneImage src={Phones} />
-        </div>
+        </ImageContainer>
 
-        <div className={styles.Form_Section_Container}>
-          <div className={styles.Form_div}>
+        <FormSectionContainer>
+          <FormWrapper>
             <div>
               <Titulo>ClonStagram</Titulo>
             </div>
@@ -200,20 +111,20 @@ const Home = () => {
                 <div></div>
               </Separator>
 
-              <Link className={styles.FacebookLink_Container} to="/">
+              <FacebookLinkContainer to="/">
                 <AiFillFacebook size="2rem" />
                 <span>Iniciar Sesión con Facebook</span>
-              </Link>
+              </FacebookLinkContainer>
 
-              <Link to="/accounts/password/reset" className={styles.ResetPassLink}>¿Has olvidado la contraseña?</Link>
+              <ResetPasswordLink to="/accounts/password/reset">¿Has olvidado la contraseña?</ResetPasswordLink>
             </Form>
-          </div>
+          </FormWrapper>
 
-          <div className={styles.NoAccount_Container}>
+          <NoAccountContainer>
             <p>¿No tienes una cuenta? <Link to="/accounts/signup">Regístrate</Link></p>
-          </div>
+          </NoAccountContainer>
 
-          <div className={styles.DownloadSection}>
+          <DownloadSectionContainer>
             <p>Descarga la aplicación.</p>
 
             <div>
@@ -226,8 +137,8 @@ const Home = () => {
                 <span>Disponible en <span>Google Play</span></span>
               </a>
             </div>
-          </div>
-        </div>
+          </DownloadSectionContainer>
+        </FormSectionContainer>
       </HomeContainer>
 
       <FooterContainer>
@@ -247,7 +158,7 @@ const Home = () => {
 
         <h3>&copy; 2020 Instagram from Facebook</h3>
       </FooterContainer>
-    </div>
+    </>
   );
 };
 

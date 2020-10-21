@@ -1,118 +1,39 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styled from '@emotion/styled';
-import styles from './styles/Register.module.scss';
 
 import { AiFillFacebook, AiFillApple } from 'react-icons/ai';
 import { FaGooglePlay } from 'react-icons/fa';
 
-import { Form, Field, Input, Label, SubmitButton, Separator } from '../components/UI/Formulario';
-
-const SeparatorExtended = styled(Separator)`
-  margin: 1.5rem 0;
-`;
-
-const HomeContainer = styled.div`
-  width: 100%;
-  padding-top: 0rem;
-  display: flex;
-  justify-content: center;
-  padding-bottom: 12rem;
-
-  @media (max-width: 875px) {
-    padding-top: 0;
-    padding-bottom: 2rem;
-  }
-`;
-
-const Titulo = styled.h3`
-  font-size: 5rem;
-  margin-top: 2rem;
-  margin-bottom: 1.5rem;
-  color: #262626;
-  font-family: 'Grand Hotel', cursive;
-`;
-
-const Description = styled.h3`
-  font-size: 1.7rem;
-  text-align: center;
-  padding:0 3rem;
-  margin-top: 0;
-  color: #8e8e8e;
-`;
-
-const TitleContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const FooterContainer = styled.footer`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(250, 250, 250);
-
-  @media (max-width: 875px) {
-    flex-direction: column;
-  }
-    
-  ul {
-      display: flex;
-      flex-wrap: wrap;
-
-      @media (max-width: 875px) {
-      margin-bottom: 0;
-    }
-
-      li {
-        list-style-type: none;
-        font-size: 1.2rem;
-        text-transform: uppercase;
-        margin-left: 2rem;
-
-        @media (max-width: 875px) {
-          margin-top: .7rem;
-        }
-
-        &:nth-of-type(1) {
-          margin-left: 0;
-        }
-        
-        a { 
-          text-decoration: none;
-          color: #00376b;
-        }
-      }
-  }
-
-  h3 {
-    font-size: 1.2rem;
-    color: #8e8e8e;
-    text-transform: uppercase;
-    margin-left: 9rem;
-
-    @media (max-width: 875px) {
-      margin-left: 0;
-    }
-  }
-`;
+import { Form, Field, Input, Label, SubmitButton } from '../../components/UI/Form';
+import {
+  SeparatorExtended,
+  HomeContainer,
+  TitleContainer,
+  Title,
+  Description,
+  FooterContainer,
+  FormSectionContainer,
+  FormContainer,
+  FacebookLoginLink,
+  ResetPasswordContainer,
+  NoAccountContainer,
+  DownloadSectionContainer
+} from './signUpElements';
 
 const Register = () => {
   return (
-    <div style={{ backgroundColor: '#fafafa', height: '100%' }}>
+    <>
       <HomeContainer>
-        <div className={styles.Form_Section_Container}>
-          <div className={styles.Form_div}>
+        <FormSectionContainer>
+          <FormContainer>
             <TitleContainer>
-              <Titulo>ClonStagram</Titulo>
+              <Title>ClonStagram</Title>
               <Description>Regístrate para ver fotos y vídeos de tus amigos.</Description>
 
-              <Link className={styles.FacebookLink_Container} to="/">
+              <FacebookLoginLink to="/">
                 <AiFillFacebook size="2rem" />
                 <span>Iniciar Sesión con Facebook</span>
-              </Link>
+              </FacebookLoginLink>
             </TitleContainer>
 
             <SeparatorExtended>
@@ -160,20 +81,20 @@ const Register = () => {
                 value="Registrarte"
               />
 
-              <div className={styles.ResetPassLink}>
+              <ResetPasswordContainer>
                 <p>
                   Al registrarte, aceptas nuestras <Link to="/accounts/signup">Condiciones</Link>,
                   la <Link to="/accounts/signup">Política de datos</Link> y la <Link to="/accounts/signup">Política de cookies</Link>.
                 </p>
-              </div>
+              </ResetPasswordContainer>
             </Form>
-          </div>
+          </FormContainer>
 
-          <div className={styles.NoAccount_Container}>
+          <NoAccountContainer>
             <p>¿Tienes una cuenta? <Link to="/">Entrar</Link></p>
-          </div>
+          </NoAccountContainer>
 
-          <div className={styles.DownloadSection}>
+          <DownloadSectionContainer>
             <p>Descarga la aplicación.</p>
 
             <div>
@@ -186,8 +107,8 @@ const Register = () => {
                 <span>Disponible en <span>Google Play</span></span>
               </a>
             </div>
-          </div>
-        </div>
+          </DownloadSectionContainer>
+        </FormSectionContainer>
       </HomeContainer>
 
       <FooterContainer>
@@ -207,7 +128,7 @@ const Register = () => {
 
         <h3>&copy; 2020 Instagram from Facebook</h3>
       </FooterContainer>
-    </div>
+    </>
   );
 };
 

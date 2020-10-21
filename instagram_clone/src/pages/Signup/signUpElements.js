@@ -1,8 +1,25 @@
-.Image_Container {
-  margin-left: 1rem;
-}
+import styled from '@emotion/styled';
+import { Separator } from '../../components/UI/Form';
+import { Link } from 'react-router-dom';
 
-.Form_Section_Container {
+export const SeparatorExtended = styled(Separator)`
+  margin: 1.5rem 0;
+`;
+
+export const HomeContainer = styled.div`
+  width: 100%;
+  padding-top: 0rem;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 12rem;
+
+  @media (max-width: 875px) {
+    padding-top: 0;
+    padding-bottom: 2rem;
+  }
+`;
+
+export const FormSectionContainer = styled.div`
   margin-right: 3rem;
   width: 350px;
   margin-top: 3.5rem;
@@ -11,9 +28,9 @@
     margin-right: 0;
     margin-top: 0;
   }
-}
+`;
 
-.Form_div {
+export const FormContainer = styled.div`
   border: 1px solid #e1e1e1;
   display: flex;
   flex-direction: column;
@@ -24,9 +41,9 @@
     border: none;
     background-color: #fafafa;
   }
-}
+`;
 
-.FacebookLink_Container {
+export const FacebookLoginLink = styled(Link)`
   width: 74%;
   height: 30px;
   display: flex;
@@ -44,9 +61,9 @@
     font-size: 1.4rem;
     margin-left: .4rem;
   }
-}
+`;
 
-.ResetPassLink {
+export const ResetPasswordContainer = styled.div`
   width: 75%;
   text-decoration: none;
   font-size: 1.2rem;
@@ -69,9 +86,9 @@
       }
     }
   }
-}
+`;
 
-.NoAccount_Container {
+export const NoAccountContainer = styled.div`
   height: 6.2rem;
   border: 1px solid #e1e1e1;
   margin-top: 1rem;
@@ -95,9 +112,31 @@
       font-weight: bold;
     }
   }
-}
+`;
 
-.DownloadSection {
+export const Title = styled.h3`
+  font-size: 5rem;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  color: #262626;
+  font-family: 'Grand Hotel', cursive;
+`;
+
+export const Description = styled.h3`
+  font-size: 1.7rem;
+  text-align: center;
+  padding:0 3rem;
+  margin-top: 0;
+  color: #8e8e8e;
+`;
+
+export const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const DownloadSectionContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -146,4 +185,56 @@
       }
     }
   }
-}
+`;
+
+export const FooterContainer = styled.footer`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(250, 250, 250);
+
+  @media (max-width: 875px) {
+    flex-direction: column;
+  }
+    
+  ul {
+      display: flex;
+      flex-wrap: wrap;
+
+      @media (max-width: 875px) {
+      margin-bottom: 0;
+    }
+
+      li {
+        list-style-type: none;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        margin-left: 2rem;
+
+        @media (max-width: 875px) {
+          margin-top: .7rem;
+        }
+
+        &:nth-of-type(1) {
+          margin-left: 0;
+        }
+        
+        a { 
+          text-decoration: none;
+          color: #00376b;
+        }
+      }
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    color: #8e8e8e;
+    text-transform: uppercase;
+    margin-left: 9rem;
+
+    @media (max-width: 875px) {
+      margin-left: 0;
+    }
+  }
+`;
