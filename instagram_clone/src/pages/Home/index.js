@@ -27,19 +27,35 @@ import image_3 from '../../images/image-3.jpg';
 import image_4 from '../../images/image-4.jpg';
 import image_5 from '../../images/image-5.jpg';
 
+const images = [
+  { id: '1', src: image_1 },
+  { id: '2', src: image_2 },
+  { id: '3', src: image_3 },
+  { id: '4', src: image_4 },
+  { id: '5', src: image_5 }
+];
+
+
 const Home = () => {
 
-  const images = [
-    { id: '1', src: image_1 },
-    { id: '2', src: image_2 },
-    { id: '3', src: image_3 },
-    { id: '4', src: image_4 },
-    { id: '5', src: image_5 }
-  ];
+  const [userInput, setUserInput] = useState({
+    email: "",
+    password: "",
+    isValid: false
+  });
 
   const [animation, setAnimation] = useState({
     activeImage: 1
   });
+
+  const { email, password } = userInput;
+
+  const handleOnChange = event => {
+    setUserInput({
+      ...userInput,
+      [event.target.name]: event.target.value
+    });
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,6 +73,20 @@ const Home = () => {
 
     return () => clearInterval(interval);
   }, [animation]);
+
+  useEffect(() => {
+    if (email.trim() !== "" && password.trim().length > 5) {
+      return setUserInput(state => ({
+        ...state,
+        isValid: true
+      }));
+    }
+
+    return setUserInput(state => ({
+      ...state,
+      isValid: false
+    }));
+  }, [email, password]);
 
   return (
     <>
@@ -86,15 +116,19 @@ const Home = () => {
               <Field>
                 <Input
                   type="text"
-                  name="correo"
+                  name="email"
+                  onChange={handleOnChange}
+                  value={email}
                   required
                 />
-                <Label htmlFor="correo">Teléfono, usuario o correo electrónico</Label>
+                <Label htmlFor="email">Teléfono, usuario o correo electrónico</Label>
               </Field>
               <Field>
                 <Input
                   type="password"
                   name="password"
+                  onChange={handleOnChange}
+                  value={password}
                   required
                 />
                 <Label htmlFor="password">Contraseña</Label>
@@ -103,6 +137,7 @@ const Home = () => {
               <SubmitButton
                 type="submit"
                 value="Iniciar Sesión"
+                valid={userInput.isValid}
               />
 
               <Separator>

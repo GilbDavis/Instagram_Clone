@@ -8,7 +8,7 @@ const config = require('./config/configuration');
 app.use(cors());
 app.use(express.json({ extended: true }));
 
-app.use("/api", require('./api/routes/index'));
+app.use(config.api.prefix, require('./api/routes/index'));
 
 server.listen(config.port, () => {
   console.log("Servidor iniciado en el puerto: ", config.port);

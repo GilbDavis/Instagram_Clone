@@ -47,7 +47,8 @@ export const Label = styled.label`
 export const SubmitButton = styled.input`
   width: 74%;
   height: 30px;
-  background-color: #0095f6;
+  background-color: ${props => (props.valid ? '#0095f6' : 'rgba(var(--d69,0,149,246),.3)')};
+  pointer-events: ${props => (props.valid ? 'auto' : 'none')};
   border: none;
   color: #fff;
   font-weight: 700;

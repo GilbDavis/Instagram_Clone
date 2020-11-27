@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AiFillFacebook, AiFillApple } from 'react-icons/ai';
@@ -21,6 +21,33 @@ import {
 } from './signUpElements';
 
 const Register = () => {
+
+  const [userInput, setUserInput] = useState({
+    email: '',
+    name: '',
+    userName: '',
+    password: '',
+    isValid: false
+  });
+
+  const { email, name, userName, password } = userInput;
+
+  const handleOnChange = event => setUserInput({ ...userInput, [event.target.name]: event.target.value });
+
+  useEffect(() => {
+    if (email.trim() !== "" && name !== "" && userName !== "" && password.trim().length > 5) {
+      return setUserInput(state => ({
+        ...state,
+        isValid: true
+      }));
+    }
+
+    return setUserInput(state => ({
+      ...state,
+      isValid: false
+    }));
+  }, [email, name, userName, password]);
+
   return (
     <>
       <HomeContainer>
@@ -46,15 +73,19 @@ const Register = () => {
               <Field>
                 <Input
                   type="text"
-                  name="correo"
+                  name="email"
                   required
+                  onChange={handleOnChange}
+                  value={email}
                 />
-                <Label htmlFor="correo">Numero de móvil o Correo electrónico</Label>
+                <Label htmlFor="email">Numero de móvil o Correo electrónico</Label>
               </Field>
               <Field>
                 <Input
                   type="text"
                   name="name"
+                  onChange={handleOnChange}
+                  value={name}
                   required
                 />
                 <Label htmlFor="name">Nombre completo</Label>
@@ -63,7 +94,9 @@ const Register = () => {
                 <Input
                   type="text"
                   name="userName"
+                  onChange={handleOnChange}
                   required
+                  value={userName}
                 />
                 <Label htmlFor="userName">Nombre de usuario</Label>
               </Field>
@@ -71,6 +104,8 @@ const Register = () => {
                 <Input
                   type="password"
                   name="password"
+                  onChange={handleOnChange}
+                  value={password}
                   required
                 />
                 <Label htmlFor="password">Contraseña</Label>
@@ -79,6 +114,7 @@ const Register = () => {
               <SubmitButton
                 type="submit"
                 value="Registrarte"
+                valid={userInput.isValid}
               />
 
               <ResetPasswordContainer>

@@ -6,7 +6,8 @@ const initialState = {
   name: null,
   email: null,
   imagePath: null,
-  userName: null
+  userName: null,
+  isAuthenticated: false
 };
 
 export default function (state = initialState, action) {

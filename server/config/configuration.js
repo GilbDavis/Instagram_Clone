@@ -15,10 +15,11 @@ module.exports = {
   jwt_secret: process.env.JWT_SECRET,
   database: {
     development: {
-      db_host: process.env.DB_HOST,
-      db_database: process.env.DB_DATABASE,
-      db_user: process.env.DB_USER,
-      db_password: process.env.DB_PASSWORD
+      db_host: process.env.DEV_DB_HOST,
+      db_database: process.env.DEV_DB_DATABASE,
+      db_user: process.env.DEV_DB_USERNAME,
+      db_password: process.env.DEV_DB_PASSWORD,
+      db_dialect: process.env.DEV_DB_DIALECT
     },
     production: {
       // db_host: process.env.RDS_HOSTNAME,
@@ -28,6 +29,5 @@ module.exports = {
       // db_port: process.env.RDS_PORT,
       // db_dialect: process.env.RDS_DIALECT
     }
-  },
-  mqtt_broker: process.env.BROKER
+  }
 };
