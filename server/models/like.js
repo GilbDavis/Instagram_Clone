@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Like.init({
-    id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Like',

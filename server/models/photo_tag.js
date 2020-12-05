@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Photo_tag.init({
-    id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Photo_tag',
