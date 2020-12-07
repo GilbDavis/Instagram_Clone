@@ -23,7 +23,8 @@ app.use((error, request, response, next) => {
   if (response.headersSent) {
     return next(error);
   }
-  return response.status(Number(error.statusCode)).json({ status: error.status, message: error.message, errors: error.data });
+  logger.warn(error.stack);
+  return response.status(parseInt(error.statusCode)).json({ status: error.status, message: error.message, errors: error.data });
 });
 
 server.listen(config.port, () => {

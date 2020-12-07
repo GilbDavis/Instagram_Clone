@@ -29,7 +29,7 @@ class DatabaseError extends Error {
   }
 }
 
-class TypeError extends Error {
+class CustomTypeError extends Error {
   constructor(statusCode, message, status, errors) {
     super(message);
 
@@ -44,5 +44,5 @@ module.exports = {
   ValidationError,
   PermissionError,
   DatabaseError,
-  TypeError
+  CustomTypeError
 };

@@ -1,4 +1,5 @@
 const { check } = require('express-validator');
+const { User } = require('../models');
 
 const validation = {
   user: {
@@ -9,11 +10,11 @@ const validation = {
           return User.findOne({ where: { email: value } })
             .then(userDoc => {
               if (userDoc) {
-                return Promise.reject("Este correo electronico ya fue utilizado.");
+                return Promise.reject("This E-mail already exists.");
               }
             })
         }).normalizeEmail({ gmail_remove_dots: false, gmail_lowercase: true }),
-      check("password", "Password should have at least 1 uppercase, 1 lowercase, a number and a character").trim().matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, "i")
+      check("password", "Password length must be 8 characters minimun.").trim().isLength(8)
     ]
   }
 };

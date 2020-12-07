@@ -11,6 +11,6 @@ route.get("/");
 route.post("/signup", validation.user.register, authenticationController.userRegisterController);
 
 // Iniciar sesion api/usuarios/login -POST
-route.post("/login");
+route.post("/login", authenticationController.userLoginController);
 
 module.exports = route;
