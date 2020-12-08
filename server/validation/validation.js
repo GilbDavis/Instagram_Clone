@@ -14,7 +14,18 @@ const validation = {
               }
             })
         }).normalizeEmail({ gmail_remove_dots: false, gmail_lowercase: true }),
+      check('userName').trim().custom((value, { req }) => {
+        return User.findOne({ where: { userName: value } })
+          .then(userDoc => {
+            if (userDoc) {
+              return Promise.reject("This username is already in use. Please try again with another username.");
+            }
+          })
+      }),
       check("password", "Password length must be 8 characters minimun.").trim().isLength(8)
+    ],
+    passwordReset: [
+      check('email', "Please enter a valid E-mail").trim().isEmail().normalizeEmail({ gmail_remove_dots: false, gmail_lowercase: true })
     ]
   }
 };

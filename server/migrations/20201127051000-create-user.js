@@ -22,6 +22,14 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
+      resetPasswordToken: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      resetPasswordExpiration: {
+        type: Sequelize.DATE,
+        allowNull: true
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

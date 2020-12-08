@@ -29,5 +29,10 @@ module.exports = {
       // db_port: process.env.RDS_PORT,
       // db_dialect: process.env.RDS_DIALECT
     }
-  }
+  },
+  gmail: {
+    email: process.env.GMAIL_USER,
+    password: process.env.GMAIL_PASSWORD
+  },
+  frontendBaseURL: process.env.FRONTEND_BASE_URL
 };

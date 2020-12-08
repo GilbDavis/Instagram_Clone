@@ -13,4 +13,6 @@ route.post("/signup", validation.user.register, authenticationController.userReg
 // Iniciar sesion api/usuarios/login -POST
 route.post("/login", authenticationController.userLoginController);
 
+route.post('/passwordreset', validation.user.passwordReset, authenticationController.userPasswordReset);
+
 module.exports = route;
