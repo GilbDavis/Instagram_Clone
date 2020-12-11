@@ -52,16 +52,15 @@ exports.userLoginController = async (request, response, next) => {
   }
 };
 
-exports.userPasswordReset = async (request, response, next) => {
+exports.sendUserPasswordReset = async (request, response, next) => {
   const errors = validationResult(request);
   if (!errors.isEmpty()) {
     logger.debug("A syntax error occurred in the registration controller");
     return next(new CustomTypeError(400, "Please check the syntax of the fields", 'fail', errors.array()));
   }
 
-  const { email } = request.body;
-
   try {
+    const { email } = request.body;
     const authenticationServiceInstance = new AuthenticationService(User, logger, config, transporter);
 
     const { message, emailSent } = await authenticationServiceInstance.sendResetPassword(email);
@@ -71,3 +70,23 @@ exports.userPasswordReset = async (request, response, next) => {
     return next(error);
   }
 };
+
+exports.resetUserPassword = async (request, response, next) => {
+  const errors = validationResult(request);
+  if (!errors.isEmpty()) {
+    logger.debug("A syntax error occurred in the registration controller");
+    return next(new CustomTypeError(400, "Please check the syntax of the fields", 'fail', errors.array()));
+  }
+
+  try {
+    const { password } = request.body;
+    const { token } = request.params;
+    const authenticationServiceInstance = new AuthenticationService(User, logger, config, transporter);
+
+    const { message } = await authenticationServiceInstance.resetPassword(password, token);
+
+    return response.status(201).json({ status: 'success', message: message });
+  } catch (error) {
+    return next(error);
+  }
+};  

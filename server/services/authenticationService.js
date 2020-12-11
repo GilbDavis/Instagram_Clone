@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const { DatabaseError, ValidationError } = require("../utils/errorHandler");
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const { response } = require('express');
 
 class Authentication {
   constructor(userModel, logger, configuration, mailer) {
@@ -91,7 +90,7 @@ class Authentication {
 
       const token = await this.userModel.update({
         resetPasswordToken: crypto.randomBytes(16).toString('hex'),
-        resetPasswordExpiration: new Date(Date.now() - (60 * 60 * 1000))
+        resetPasswordExpiration: new Date(Date.now() + (60 * 60 * 1000))
       }, {
         where: { id: validateEmail.id },
         returning: true,
@@ -112,6 +111,50 @@ class Authentication {
       await this.mailer.sendMail(msg);
 
       return { message: "Email was sent successfully", emailSent: true };
+    } catch (error) {
+      this.logger.error("An error occurred in teh SendResetPassword method: ", error.stack);
+      throw error;
+    }
+  }
+
+  async resetPassword(password, token) {
+    try {
+      const findToken = await this.userModel.findOne({ where: { resetPasswordToken: token } });
+      if (!findToken) {
+        this.logger.error("An error ocurred while verifying a password reset token");
+        throw new DatabaseError(404, "This token is not valid. Your token may have expired.", "error");
+      }
+
+      const user = await this.userModel.findByPk(findToken.id);
+      if (!user) {
+        throw new DatabaseError(404, "We were unable to find a user for this token.", "error");
+      }
+      if (user.resetPasswordToken !== findToken.resetPasswordToken) {
+        throw new ValidationError(400, "User token and your token didn't match. You may have a more recent token in your mail list.", 'fail');
+      }
+
+      if (new Date() > user.resetPasswordExpiration) {
+        console.log(`Nueva fecha: ${new Date()}, fecha antigua: ${user.resetPasswordExpiration}`)
+        throw new DatabaseError(400, "Your reset token is expired. Please go through the reset form again.", "fail");
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+      user.resetPasswordToken = null;
+      user.resetPasswordExpiration = null;
+      if (!await user.save()) {
+        throw new DatabaseError(500, "An unexpected error occurred.", 'error');
+      }
+
+      const mail = {
+        to: user.email,
+        from: this.config.gmail.email,
+        subject: "Your pasword has been changed",
+        html: `<p>This is a confirmation that the password for your account ${user.email} has just been changed.</p>`
+      };
+      await this.mailer.sendMail(mail);
+
+      return { message: 'Your password has been successfully changed.' };
     } catch (error) {
       throw error;
     }

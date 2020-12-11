@@ -26,6 +26,9 @@ const validation = {
     ],
     passwordReset: [
       check('email', "Please enter a valid E-mail").trim().isEmail().normalizeEmail({ gmail_remove_dots: false, gmail_lowercase: true })
+    ],
+    confirmPasswordReset: [
+      check("password", "Password length must be 8 characters minimun.").trim().isLength(8)
     ]
   }
 };
