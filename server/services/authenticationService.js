@@ -32,8 +32,12 @@ class Authentication {
         expiresIn: '1h'
       });
       this.logger.debug("Token has been generated!");
+      const userData = await this.userModel.findByPk(user.id, { attributes: { exclude: ['password', 'id', 'resetPasswordToken', 'resetPasswordExpiration', 'createdAt', 'updatedAt'] } });
+      if (!userData) {
+        throw new DatabaseError(500, "An error has occurred while fetching data.", 'error');
+      }
 
-      return { token };
+      return { token, user: userData };
     } catch (error) {
       this.logger.debug(`A ${error.name}: ${error.message} | Occurred in Register Service`);
       throw error;
@@ -42,10 +46,12 @@ class Authentication {
 
   async login(email, password) {
     try {
-      const user = await this.userModel.findOne({ $or: [{ email: email }, { userName: email }] });
+      // const user = await this.userModel.findOne({ $or: [{ email: email }, { userName: email }] });
+      const user = await this.userModel.findOne({ where: { email: email } });
+      console.log(`User find login: ${user}`)
       if (!user) {
         this.logger.error(`${email} was not found in the database`);
-        throw new DatabaseError(404, "User not found", "fail");
+        throw new DatabaseError(404, "Unable to find the account.", "fail");
       }
 
       const passwordVerification = await bcrypt.compare(password, user.password);
@@ -60,8 +66,12 @@ class Authentication {
         }
       };
       const token = jwt.sign(payload, this.config.jwt_secret);
+      const userData = await this.userModel.findByPk(user.id, { attributes: { exclude: ['password', 'id', 'resetPasswordToken', 'resetPasswordExpiration', 'createdAt', 'updatedAt'] } });
+      if (!userData) {
+        throw new DatabaseError(500, "An error has occurred while fetching data.", 'error');
+      }
 
-      return { token };
+      return { token, user: userData };
     } catch (error) {
       throw error;
     }
@@ -69,7 +79,7 @@ class Authentication {
 
   async isAuthenticated(userId) {
     try {
-      const user = await this.userModel.findByPk(userId, { attributes: { exclude: ['password'] } },);
+      const user = await this.userModel.findByPk(userId, { attributes: { exclude: ['password'] } });
       if (!user) {
         throw new ValidationError(401, "You are not authenticated. Please login to your account.", "error");
       }

@@ -30,9 +30,9 @@ exports.userRegisterController = async (request, response, next) => {
   try {
     const authenticationServiceInstance = new AuthenticationService(User, logger, config);
 
-    const { token } = await authenticationServiceInstance.signUp(userDTO);
+    const { token, user } = await authenticationServiceInstance.signUp(userDTO);
 
-    return response.status(201).json({ status: "success", token });
+    return response.status(201).json({ status: "success", token, user });
   } catch (error) {
     return next(error);
   }
@@ -44,9 +44,9 @@ exports.userLoginController = async (request, response, next) => {
   try {
     const authenticationServiceInstance = new AuthenticationService(User, logger, config);
 
-    const { token } = await authenticationServiceInstance.login(email, password);
+    const { token, user } = await authenticationServiceInstance.login(email, password);
 
-    return response.status(200).json({ status: 'success', token });
+    return response.status(200).json({ status: 'success', token, user });
   } catch (error) {
     return next(error);
   }

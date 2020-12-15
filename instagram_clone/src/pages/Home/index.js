@@ -20,6 +20,9 @@ import {
   DownloadSectionContainer
 } from './homeElements';
 
+import { useDispatch } from 'react-redux';
+import { startSessionAction } from '../../actions/userActions/loginAction';
+
 import Phones from '../../images/phones-background.png';
 import image_1 from '../../images/image-1.jpg';
 import image_2 from '../../images/image-2.jpg';
@@ -37,6 +40,8 @@ const images = [
 
 
 const Home = () => {
+
+  const dispatch = useDispatch();
 
   const [userInput, setUserInput] = useState({
     email: "",
@@ -88,6 +93,16 @@ const Home = () => {
     }));
   }, [email, password]);
 
+  const handleOnSubmit = event => {
+    event.preventDefault();
+
+    if (userInput.isValid === false) {
+      return;
+    }
+
+    return dispatch(startSessionAction(email, password));
+  };
+
   return (
     <>
       <HomeContainer>
@@ -112,7 +127,7 @@ const Home = () => {
               <Titulo>ClonStagram</Titulo>
             </div>
 
-            <Form>
+            <Form onSubmit={handleOnSubmit}>
               <Field>
                 <Input
                   type="text"

@@ -20,7 +20,12 @@ import {
   DownloadSectionContainer
 } from './signUpElements';
 
+import { useDispatch } from 'react-redux';
+import { startSignUpAction } from '../../actions/userActions/signUpAction';
+
 const Register = () => {
+
+  const dispatch = useDispatch();
 
   const [userInput, setUserInput] = useState({
     email: '',
@@ -34,8 +39,18 @@ const Register = () => {
 
   const handleOnChange = event => setUserInput({ ...userInput, [event.target.name]: event.target.value });
 
+  const handleOnSubmit = event => {
+    event.preventDefault();
+
+    if (userInput.isValid === false) {
+      return;
+    }
+
+    return dispatch(startSignUpAction({ email, fullName: name, userName, password }));
+  };
+
   useEffect(() => {
-    if (email.trim() !== "" && name !== "" && userName !== "" && password.trim().length > 5) {
+    if (email.trim() !== "" && name !== "" && userName !== "" && password.trim().length > 7) {
       return setUserInput(state => ({
         ...state,
         isValid: true
@@ -69,7 +84,7 @@ const Register = () => {
               <div></div>
             </SeparatorExtended>
 
-            <Form>
+            <Form onSubmit={handleOnSubmit}>
               <Field>
                 <Input
                   type="text"

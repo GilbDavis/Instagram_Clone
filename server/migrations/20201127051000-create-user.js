@@ -22,6 +22,10 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
+      profileImage: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       resetPasswordToken: {
         type: Sequelize.STRING,
         allowNull: true
