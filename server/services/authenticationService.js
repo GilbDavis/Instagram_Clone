@@ -65,7 +65,9 @@ class Authentication {
           id: user.id
         }
       };
-      const token = jwt.sign(payload, this.config.jwt_secret);
+      const token = jwt.sign(payload, this.config.jwt_secret, {
+        expiresIn: '1h'
+      });
       const userData = await this.userModel.findByPk(user.id, { attributes: { exclude: ['password', 'id', 'resetPasswordToken', 'resetPasswordExpiration', 'createdAt', 'updatedAt'] } });
       if (!userData) {
         throw new DatabaseError(500, "An error has occurred while fetching data.", 'error');
@@ -79,7 +81,7 @@ class Authentication {
 
   async isAuthenticated(userId) {
     try {
-      const user = await this.userModel.findByPk(userId, { attributes: { exclude: ['password'] } });
+      const user = await this.userModel.findByPk(userId, { attributes: { exclude: ['password', 'id', 'resetPasswordToken', 'resetPasswordExpiration', 'createdAt', 'updatedAt'] } });
       if (!user) {
         throw new ValidationError(401, "You are not authenticated. Please login to your account.", "error");
       }

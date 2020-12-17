@@ -4,7 +4,9 @@ import {
   LOGIN_SUCCESS,
   SIGNUP_SUCCESS,
   SIGNUP_START,
-  SIGNUP_ERROR
+  SIGNUP_ERROR,
+  AUTHENTICATION_ERROR,
+  AUTHENTICATION_SUCCESS
 } from '../types/index';
 
 const initialState = {
@@ -24,12 +26,24 @@ export default function (state = initialState, action) {
       }
     case LOGIN_ERROR:
     case SIGNUP_ERROR:
+    case AUTHENTICATION_ERROR:
+      localStorage.removeItem('authToken');
       return {
         ...state,
+        userData: null,
+        isAuthenticated: false,
         error: {
           errorMessage: (action.payload.message) ? action.payload.message : null,
           validationErrors: (Array.isArray(action.payload)) ? action.payload.errors.map(err => err.msg) : null
         },
+        loading: false
+      }
+    case AUTHENTICATION_SUCCESS:
+      return {
+        ...state,
+        userData: action.payload,
+        isAuthenticated: true,
+        error: null,
         loading: false
       }
     case SIGNUP_SUCCESS:

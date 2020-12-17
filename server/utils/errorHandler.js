@@ -9,11 +9,11 @@ class ValidationError extends Error {
   }
 }
 
-class PermissionError extends Error {
+class AuthenticationError extends Error {
   constructor(statusCode, message, status) {
     super(message);
 
-    this.name = "PermissionError";
+    this.name = "AuthenticationError";
     this.statusCode = statusCode;
     this.status = status;
   }
@@ -42,7 +42,7 @@ class CustomTypeError extends Error {
 
 module.exports = {
   ValidationError,
-  PermissionError,
+  AuthenticationError,
   DatabaseError,
   CustomTypeError
 };

@@ -4,8 +4,10 @@ const route = express.Router();
 const authenticationController = require('../controllers/userAuthenticationController');
 const validation = require('../../validation/validation');
 
+const isAuthenticated = require('../middlewares/isAuthenticated');
+
 // Obtiene el usuario autenticado /api/authentication --GET
-route.get("/");
+route.get("/authenticate", isAuthenticated, authenticationController.authenticateUser);
 
 // Create an user. route: api/authentication/signup --POST
 route.post("/signup", validation.user.register, authenticationController.userRegisterController);

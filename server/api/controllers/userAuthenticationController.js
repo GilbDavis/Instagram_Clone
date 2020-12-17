@@ -89,4 +89,16 @@ exports.resetUserPassword = async (request, response, next) => {
   } catch (error) {
     return next(error);
   }
-};  
+};
+
+exports.authenticateUser = async (request, response, next) => {
+  try {
+    const authenticationServiceInstance = new AuthenticationService(User, logger, config);
+
+    const user = await authenticationServiceInstance.isAuthenticated(request.user.id);
+
+    return response.status(200).json({ status: 'success', user });
+  } catch (error) {
+    return next(error);
+  }
+};

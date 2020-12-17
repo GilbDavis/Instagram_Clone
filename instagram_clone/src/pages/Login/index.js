@@ -1,54 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AiFillFacebook, AiFillApple } from 'react-icons/ai';
 import { FaGooglePlay } from 'react-icons/fa';
 
-import { Form, Field, Input, Label, SubmitButton } from '../../components/UI/Form';
+import { Form, Field, Input, Label, SubmitButton, Separator } from '../../components/UI/Form';
 import {
-  SeparatorExtended,
   HomeContainer,
-  TitleContainer,
-  Title,
-  Description,
+  Titulo,
+  PhoneImage,
+  ImagesAnimationContainer,
   FooterContainer,
+  ImageContainer,
   FormSectionContainer,
-  FormContainer,
-  FacebookLoginLink,
-  ResetPasswordContainer,
+  FormWrapper,
+  FacebookLinkContainer,
+  ResetPasswordLink,
   NoAccountContainer,
   DownloadSectionContainer
-} from './signUpElements';
+} from './LoginElements';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { startSignUpAction } from '../../actions/userActions/signUpAction';
+import { startSessionAction } from '../../actions/userActions/loginAction';
 import { authenticateUser } from '../../actions/userActions/authenticateAction';
 
-const Register = (props) => {
+import Phones from '../../images/phones-background.png';
+import image_1 from '../../images/image-1.jpg';
+import image_2 from '../../images/image-2.jpg';
+import image_3 from '../../images/image-3.jpg';
+import image_4 from '../../images/image-4.jpg';
+import image_5 from '../../images/image-5.jpg';
 
-  const dispatch = useDispatch();
+const images = [
+  { id: '1', src: image_1 },
+  { id: '2', src: image_2 },
+  { id: '3', src: image_3 },
+  { id: '4', src: image_4 },
+  { id: '5', src: image_5 }
+];
+
+
+const Home = (props) => {
+
   const user = useSelector(state => state.user);
 
+  const dispatch = useDispatch();
+
   const [userInput, setUserInput] = useState({
-    email: '',
-    name: '',
-    userName: '',
-    password: '',
+    email: "",
+    password: "",
     isValid: false
   });
 
-  const { email, name, userName, password } = userInput;
+  const [animation, setAnimation] = useState({
+    activeImage: 1
+  });
 
-  const handleOnChange = event => setUserInput({ ...userInput, [event.target.name]: event.target.value });
+  const { email, password } = userInput;
 
-  const handleOnSubmit = event => {
-    event.preventDefault();
-
-    if (userInput.isValid === false) {
-      return;
-    }
-
-    return dispatch(startSignUpAction({ email, fullName: name, userName, password }));
+  const handleOnChange = event => {
+    setUserInput({
+      ...userInput,
+      [event.target.name]: event.target.value
+    });
   };
 
   useEffect(() => {
@@ -61,10 +75,28 @@ const Register = (props) => {
     if (user.isAuthenticated) {
       props.history.push("/");
     }
-  }, [user.isAuthenticated]);
+  }, [props.history, user.isAuthenticated]);
+
 
   useEffect(() => {
-    if (email.trim() !== "" && name !== "" && userName !== "" && password.trim().length > 7) {
+    const interval = setInterval(() => {
+      setAnimation(prevState => ({
+        ...animation,
+        activeImage: prevState.activeImage + 1
+      }));
+
+      if (animation.activeImage >= 4) {
+        return setAnimation({
+          activeImage: 1
+        });
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [animation]);
+
+  useEffect(() => {
+    if (email.trim() !== "" && password.trim().length > 5) {
       return setUserInput(state => ({
         ...state,
         isValid: true
@@ -75,59 +107,52 @@ const Register = (props) => {
       ...state,
       isValid: false
     }));
-  }, [email, name, userName, password]);
+  }, [email, password]);
+
+  const handleOnSubmit = event => {
+    event.preventDefault();
+
+    if (userInput.isValid === false) {
+      return;
+    }
+
+    return dispatch(startSessionAction(email, password));
+  };
 
   return (
     <>
       <HomeContainer>
+        <ImageContainer>
+          <ImagesAnimationContainer>
+            {images.map((image) =>
+              <img
+                key={image.id}
+                className={`AnimatedImage${Number(image.id) === animation.activeImage ? ' showImage' : ''}`}
+                alt="crossfading-images"
+                src={image.src}
+              />
+            )}
+          </ImagesAnimationContainer>
+
+          <PhoneImage src={Phones} />
+        </ImageContainer>
+
         <FormSectionContainer>
-          <FormContainer>
-            <TitleContainer>
-              <Title>ClonStagram</Title>
-              <Description>Regístrate para ver fotos y vídeos de tus amigos.</Description>
-
-              <FacebookLoginLink to="/">
-                <AiFillFacebook size="2rem" />
-                <span>Iniciar Sesión con Facebook</span>
-              </FacebookLoginLink>
-            </TitleContainer>
-
-            <SeparatorExtended>
-              <div></div>
-              <div>o</div>
-              <div></div>
-            </SeparatorExtended>
+          <FormWrapper>
+            <div>
+              <Titulo>ClonStagram</Titulo>
+            </div>
 
             <Form onSubmit={handleOnSubmit}>
               <Field>
                 <Input
                   type="text"
                   name="email"
-                  required
                   onChange={handleOnChange}
                   value={email}
-                />
-                <Label htmlFor="email">Numero de móvil o Correo electrónico</Label>
-              </Field>
-              <Field>
-                <Input
-                  type="text"
-                  name="name"
-                  onChange={handleOnChange}
-                  value={name}
                   required
                 />
-                <Label htmlFor="name">Nombre completo</Label>
-              </Field>
-              <Field>
-                <Input
-                  type="text"
-                  name="userName"
-                  onChange={handleOnChange}
-                  required
-                  value={userName}
-                />
-                <Label htmlFor="userName">Nombre de usuario</Label>
+                <Label htmlFor="email">Teléfono, usuario o correo electrónico</Label>
               </Field>
               <Field>
                 <Input
@@ -142,21 +167,27 @@ const Register = (props) => {
 
               <SubmitButton
                 type="submit"
-                value="Registrarte"
+                value="Iniciar Sesión"
                 valid={userInput.isValid}
               />
 
-              <ResetPasswordContainer>
-                <p>
-                  Al registrarte, aceptas nuestras <Link to="/accounts/signup">Condiciones</Link>,
-                  la <Link to="/accounts/signup">Política de datos</Link> y la <Link to="/accounts/signup">Política de cookies</Link>.
-                </p>
-              </ResetPasswordContainer>
+              <Separator>
+                <div></div>
+                <div>o</div>
+                <div></div>
+              </Separator>
+
+              <FacebookLinkContainer to="/">
+                <AiFillFacebook size="2rem" />
+                <span>Iniciar Sesión con Facebook</span>
+              </FacebookLinkContainer>
+
+              <ResetPasswordLink to="/accounts/password/reset">¿Has olvidado la contraseña?</ResetPasswordLink>
             </Form>
-          </FormContainer>
+          </FormWrapper>
 
           <NoAccountContainer>
-            <p>¿Tienes una cuenta? <Link to="/">Entrar</Link></p>
+            <p>¿No tienes una cuenta? <Link to="/signup">Regístrate</Link></p>
           </NoAccountContainer>
 
           <DownloadSectionContainer>
@@ -197,4 +228,4 @@ const Register = (props) => {
   );
 };
 
-export default Register;
+export default Home;
