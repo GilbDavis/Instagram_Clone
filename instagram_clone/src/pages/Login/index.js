@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { AiFillFacebook, AiFillApple } from 'react-icons/ai';
 import { FaGooglePlay } from 'react-icons/fa';
 
+import Spinner from '../../components/Spinner/spinner';
 import { Form, Field, Input, Label, SubmitButton, Separator } from '../../components/UI/Form';
 import {
   HomeContainer,
@@ -40,7 +41,7 @@ const images = [
 ];
 
 
-const Home = (props) => {
+const Login = (props) => {
 
   const user = useSelector(state => state.user);
 
@@ -77,7 +78,6 @@ const Home = (props) => {
     }
   }, [props.history, user.isAuthenticated]);
 
-
   useEffect(() => {
     const interval = setInterval(() => {
       setAnimation(prevState => ({
@@ -108,6 +108,10 @@ const Home = (props) => {
       isValid: false
     }));
   }, [email, password]);
+
+  if (user.loading) {
+    return <Spinner />;
+  }
 
   const handleOnSubmit = event => {
     event.preventDefault();
@@ -228,4 +232,4 @@ const Home = (props) => {
   );
 };
 
-export default Home;
+export default Login;

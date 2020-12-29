@@ -61,7 +61,7 @@ const Register = (props) => {
     if (user.isAuthenticated) {
       props.history.push("/");
     }
-  }, [user.isAuthenticated]);
+  }, [user.isAuthenticated, props.history]);
 
   useEffect(() => {
     if (email.trim() !== "" && name !== "" && userName !== "" && password.trim().length > 7) {

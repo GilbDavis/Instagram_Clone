@@ -6,7 +6,9 @@ import {
   SIGNUP_START,
   SIGNUP_ERROR,
   AUTHENTICATION_ERROR,
-  AUTHENTICATION_SUCCESS
+  AUTHENTICATION_SUCCESS,
+  AUTHENTICATION_START,
+  AUTHENTICATION_TOKEN_ERROR
 } from '../types/index';
 
 const initialState = {
@@ -20,6 +22,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case LOGIN_START:
     case SIGNUP_START:
+    case AUTHENTICATION_START:
       return {
         ...state,
         loading: action.payload
@@ -45,6 +48,11 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         error: null,
         loading: false
+      }
+    case AUTHENTICATION_TOKEN_ERROR:
+      return {
+        ...state,
+        loading: action.payload
       }
     case SIGNUP_SUCCESS:
     case LOGIN_SUCCESS:

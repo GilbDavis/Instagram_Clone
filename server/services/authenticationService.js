@@ -29,7 +29,7 @@ class Authentication {
         }
       };
       const token = jwt.sign(payload, this.config.jwt_secret, {
-        expiresIn: '1h'
+        expiresIn: '3600h'
       });
       this.logger.debug("Token has been generated!");
       const userData = await this.userModel.findByPk(user.id, { attributes: { exclude: ['password', 'id', 'resetPasswordToken', 'resetPasswordExpiration', 'createdAt', 'updatedAt'] } });
@@ -66,7 +66,7 @@ class Authentication {
         }
       };
       const token = jwt.sign(payload, this.config.jwt_secret, {
-        expiresIn: '1h'
+        expiresIn: '3600h'
       });
       const userData = await this.userModel.findByPk(user.id, { attributes: { exclude: ['password', 'id', 'resetPasswordToken', 'resetPasswordExpiration', 'createdAt', 'updatedAt'] } });
       if (!userData) {

@@ -8,7 +8,7 @@ import Home from './pages/Home/index';
 import Register from './pages/Signup/index';
 import PrivateRoute from './components/PrivateRoute';
 
-function App() {
+function App(props) {
 
   const token = localStorage.getItem("authToken");
   if (token) {

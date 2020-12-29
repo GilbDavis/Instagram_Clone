@@ -1,10 +1,17 @@
 import React from 'react';
+import {
+  HomePageContainer,
+} from './homeElements';
+
+import Header from '../../components/UI/Header/index';
 
 const HomePage = () => {
+
   return (
-    <div>
-      Logged in successfully!
-    </div>
+    <HomePageContainer>
+      <Header />
+
+    </HomePageContainer>
   );
 };
 
