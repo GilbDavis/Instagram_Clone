@@ -74,6 +74,8 @@ export const SearchBar = styled.input`
   border-radius: 3px;
   background: #fafafa;
   padding: 3px 10px 3px 26px;
+  z-index: 1;
+  position: relative;
 
   &:focus {
     outline: none;
@@ -130,12 +132,22 @@ export const SearchIconFocus = styled(SearchIcon)`
   position: absolute;
   left: 1.1rem;
   margin-top: 0.8rem;
+  z-index: 100;
 `;
 
-export const SearchCancelFocus = styled(SearchIcon)`
+export const SearchCancelFocus = styled.div`
+  margin-top: .25rem;
+  font-size: 1.2rem;
+  margin-right: .4rem;
+  color: #8e8e8e;
   position: absolute;
+  z-index: 100;
   right: 5px;
   top: .35rem;
   font-size: 1.6rem;
   opacity: 0.5;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;

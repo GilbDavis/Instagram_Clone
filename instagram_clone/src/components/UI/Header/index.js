@@ -31,10 +31,44 @@ const Header = () => {
   const user = useSelector(state => state.user);
 
   const [focus, setFocus] = useState(false);
+  const [input, setInput] = useState({
+    search: '',
+    isFocused: false
+  });
 
-  const handleFocus = () => {
+  const handleSetFocus = () => {
     searchInput.current.focus();
-  }
+  };
+
+  const handleOnChangeInput = event => {
+    setInput({
+      ...input,
+      search: event.target.value
+    });
+  };
+
+  const handleInputOnFocus = () => {
+    setFocus(true);
+    setInput({
+      ...input,
+      isFocused: true
+    });
+  };
+
+  const handleInputOnBlur = () => {
+    setInput({
+      ...input,
+      isFocused: false
+    });
+    setFocus(false);
+  };
+
+  const handleSearchCancelBtn = () => {
+    setInput({
+      ...input,
+      search: ''
+    });
+  };
 
   return (
     <HeaderContainer>
@@ -42,19 +76,19 @@ const Header = () => {
         <NavigationWrapper>
           <Logo to="/">Clonstagram</Logo>
           <SearchBarContainer>
-            <SearchBar ref={searchInput} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} type="text" name='search' id="search" placeholder="Busca" />
+            <SearchBar ref={searchInput} onChange={handleOnChangeInput} value={input.isFocused === true ? input.search : ''} onFocus={handleInputOnFocus} onBlur={handleInputOnBlur} type="text" name='search' id="search" placeholder="Busca" />
             {focus ?
               (
                 <>
                   <SearchIconFocus><BiSearch /></SearchIconFocus>
-                  <SearchCancelFocus><MdCancel /></SearchCancelFocus>
+                  <SearchCancelFocus ><MdCancel onMouseDown={() => handleSearchCancelBtn()} /></SearchCancelFocus>
                 </>
               )
               :
-              (<SearchingContainer onClick={handleFocus}>
+              (<SearchingContainer onClick={handleSetFocus}>
                 <SearchIconTextContainer>
                   <SearchIcon><BiSearch /></SearchIcon>
-                  <SearchText>Busca</SearchText>
+                  <SearchText>{input.search !== '' ? input.search : "Busca"}</SearchText>
                 </SearchIconTextContainer>
               </SearchingContainer>)
             }

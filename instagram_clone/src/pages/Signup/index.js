@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { AiFillFacebook, AiFillApple } from 'react-icons/ai';
 import { FaGooglePlay } from 'react-icons/fa';
 
+import Spinner from '../../components/Spinner/spinner';
 import { Form, Field, Input, Label, SubmitButton } from '../../components/UI/Form';
 import {
   SeparatorExtended,
@@ -76,6 +77,10 @@ const Register = (props) => {
       isValid: false
     }));
   }, [email, name, userName, password]);
+
+  if (user.loading) {
+    return <Spinner />;
+  }
 
   return (
     <>
