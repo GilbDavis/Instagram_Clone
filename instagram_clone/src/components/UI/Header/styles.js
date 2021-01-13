@@ -4,6 +4,10 @@ import { Link } from 'react-router-dom';
 export const HeaderContainer = styled.div`
   width: 100%;
   height: 54px;
+  position: fixed;
+  top: 0;
+  background: #fff;
+  z-index: 9999;
 `;
 
 export const NavigationContainer = styled.nav`
@@ -68,14 +72,13 @@ export const SearchBarContainer = styled.div`
 `;
 
 export const SearchBar = styled.input`
-  font-size: 1.6rem;
+  width: 100%;
+  font-size: 1.4rem;
   align-self: stretch;
   border: solid 1px rgba(var(--b6a,219,219,219),1);
   border-radius: 3px;
   background: #fafafa;
   padding: 3px 10px 3px 26px;
-  z-index: 1;
-  position: relative;
 
   &:focus {
     outline: none;
