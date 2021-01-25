@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { openModal } from '../../../actions/modalActions/modalActions';
+
 import {
   HeaderContainer,
   Logo,
@@ -15,7 +17,8 @@ import {
   SearchText,
   SearchIconTextContainer,
   SearchIconFocus,
-  SearchCancelFocus
+  SearchCancelFocus,
+  CreatePostButton
 } from './styles';
 
 import { BiHomeAlt, BiSearch } from 'react-icons/bi';
@@ -24,9 +27,11 @@ import { FaRegCompass } from 'react-icons/fa';
 import { VscHeart } from 'react-icons/vsc';
 import { CgProfile } from 'react-icons/cg';
 import { MdCancel } from 'react-icons/md';
+import { GrAddCircle } from 'react-icons/gr';
 
 const Header = () => {
 
+  const dispatch = useDispatch();
   const searchInput = useRef(null);
   const user = useSelector(state => state.user);
 
@@ -98,6 +103,7 @@ const Header = () => {
             <NavLink marginleft='2.2rem' to="/direct/inbox"><RiMessengerLine /></NavLink>
             <NavLink marginleft="2.2rem" to="/explore"><FaRegCompass size="23px" /></NavLink>
             <NavLink marginleft="2.2rem" to="/activity"><VscHeart strokeWidth="0.35" /></NavLink>
+            <CreatePostButton marginleft="2.2rem" onClick={() => dispatch(openModal())}><GrAddCircle /></CreatePostButton>
             <NavLink marginleft='2.2rem' to="">
               {(user.userData.profileImage) ?
                 <ProfileImage src={user.userData.profileImage} alt="User Image" /> :

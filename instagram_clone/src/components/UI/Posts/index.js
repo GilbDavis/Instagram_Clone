@@ -258,6 +258,15 @@ const PostFooterComments = styled.div`
     &:first-of-type {
       font-weight: bold;
     }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 `;
 
@@ -352,7 +361,7 @@ const Posts = () => {
                         <PostFooterSeeComments><Link to="/">Ver los {post.comments.length} comentarios</Link></PostFooterSeeComments>
                         {post.comments.slice(-2).map((comment, current) => (
                           <PostFooterComments key={current}>
-                            <span>{comment.user}</span>
+                            <span><Link to={`/${comment.user}`}>{comment.user}</Link></span>
                             <span>&nbsp;{comment.comment_text}</span>
                           </PostFooterComments>
                         ))}
@@ -360,7 +369,7 @@ const Posts = () => {
                       :
                       post.comments.map((comment, current) => (
                         <PostFooterComments key={current}>
-                          <span>{comment.user}</span>
+                          <span><Link to={`/${comment.user}`}>{comment.user}</Link></span>
                           <span>&nbsp;{comment.comment_text}</span>
                         </PostFooterComments>
                       ))

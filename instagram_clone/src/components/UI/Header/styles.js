@@ -58,6 +58,22 @@ export const NavLink = styled(Link)`
   margin-left: ${props => props.marginleft ? props.marginleft : 0};
 `;
 
+export const CreatePostButton = styled.button`
+  height: 100%;
+  font-weight: normal;
+  font-size: 2.6rem;
+  text-decoration: none;
+  color: inherit;
+  margin-left: ${props => props.marginleft ? props.marginleft : 0};
+  background: 0 0;
+  outline: none;
+  border: none;
+
+  &:hover {
+    cursor:pointer;
+  }
+`;
+
 export const ProfileImage = styled.img`
   width: 22px;
   height: 22px;
