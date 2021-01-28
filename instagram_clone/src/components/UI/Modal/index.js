@@ -8,6 +8,8 @@ import { isImage, isVideo } from '../../../utils/fileExtension';
 import Rodal from 'rodal';
 import 'rodal/lib/rodal.css';
 
+import { createPost } from '../../../actions/postsActions/postsActions';
+
 const ModalHeader = styled.header`
   display: flex;
   align-items: center;
@@ -172,15 +174,20 @@ const Modal = () => {
 
   const handleOnSubmit = event => {
     event.preventDefault();
+
+    if (isImage(formData.extension) || isVideo(formData.extension)) {
+      return dispatch(createPost({ title: formData.title, file: formData.file }));
+    } else {
+      return;
+    }
   };
 
   return (
     <Rodal
       customStyles={{ width: windowWidth < 630 ? '90%' : '614px', height: windowWidth < 630 ? '70%' : '800px' }}
-      visible={showModal} 
+      visible={showModal}
       closeOnEsc={true}
       onClose={() => dispatch(closeModal())}
-      // showCloseButton={false}
     >
       <ModalHeader>
         <Title>Clonstagram</Title>

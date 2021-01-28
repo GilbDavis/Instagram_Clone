@@ -44,7 +44,6 @@ const images = [
 const Login = (props) => {
 
   const user = useSelector(state => state.user);
-
   const dispatch = useDispatch();
 
   const [userInput, setUserInput] = useState({
