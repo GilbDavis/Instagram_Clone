@@ -16,6 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Tag',
+    timestamps: true,
+    updatedAt: false
   });
   return Tag;
 };

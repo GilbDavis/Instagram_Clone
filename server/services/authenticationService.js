@@ -19,7 +19,7 @@ class Authentication {
       const user = await this.userModel.create(userDTO);
       if (!user) {
         this.logger.error(`An error occurred while creating ${userDTO.fullName} user`)
-        throw new DatabaseError(500, "An error ocurred while singup", "error");
+        throw new DatabaseError(500, "An error ocurred in the signup", "error");
       }
 
       this.logger.info(`${userDTO.email} created successfully`);

@@ -24,10 +24,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Photo.init({
-    image_url: DataTypes.STRING
+    title: DataTypes.STRING,
+    image_url: DataTypes.STRING,
+    createdAt: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Photo',
+    timestamps: true,
+    updatedAt: false
   });
   return Photo;
 };

@@ -34,5 +34,11 @@ module.exports = {
     email: process.env.GMAIL_USER,
     password: process.env.GMAIL_PASSWORD
   },
-  frontendBaseURL: process.env.FRONTEND_BASE_URL
+  frontendBaseURL: process.env.FRONTEND_BASE_URL,
+  aws: {
+    bucket: process.env.AWS_BUCKET,
+    accessKey: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+  }
 };

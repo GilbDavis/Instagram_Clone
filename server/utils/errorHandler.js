@@ -40,9 +40,20 @@ class CustomTypeError extends Error {
   }
 }
 
+class FileManagementError extends Error {
+  constructor(statusCode, message, status) {
+    super(message);
+
+    this.statusCode = statusCode;
+    this.status = status;
+    this.name = "FileManagementError";
+  }
+}
+
 module.exports = {
   ValidationError,
   AuthenticationError,
   DatabaseError,
-  CustomTypeError
+  CustomTypeError,
+  FileManagementError
 };
