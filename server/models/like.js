@@ -16,6 +16,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Like.init({
+    UserId: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: true,
+      autoIncrement: false
+    },
+    PhotoId: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: false
+    }
   }, {
     sequelize,
     modelName: 'Like',
