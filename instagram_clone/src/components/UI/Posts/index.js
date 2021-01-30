@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { BsThreeDots, BsChatDots } from 'react-icons/bs';
@@ -10,6 +10,8 @@ import { CgProfile } from 'react-icons/cg';
 import formatDistance from 'date-fns/formatDistance';
 import format from 'date-fns/format';
 import { es } from 'date-fns/locale';
+
+import { getAllFollowingPosts } from '../../../actions/postsActions/postsActions';
 
 import {
   MainContainer,
@@ -32,7 +34,12 @@ import {
 } from './styles';
 
 const Posts = () => {
+  const dispatch = useDispatch();
   const posts = useSelector(state => state.post.posts);
+
+  useEffect(() => {
+    dispatch(getAllFollowingPosts());
+  }, []);
 
   return (
     <MainContainer>
@@ -111,7 +118,7 @@ const Posts = () => {
                 </PostFooterTitle>
 
                 {
-                  post.comments ?
+                  post.comments.length > 0 ?
                     post.comments.length > 2 ?
                       <>
                         <PostFooterSeeComments><Link to="/">Ver los {post.comments.length} comentarios</Link></PostFooterSeeComments>

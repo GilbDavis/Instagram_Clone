@@ -2,15 +2,43 @@ import {
   CREATEPOST_ERROR,
   CREATEPOST_SUCCESS,
   CREATEPOST_START,
-  CREATEPOST_UPLOAD_PROGRESS
+  CREATEPOST_UPLOAD_PROGRESS,
+  GET_FOLLOWING_POSTS_ERROR,
+  GET_FOLLOWING_POSTS_START,
+  GET_FOLLOWING_POSTS_SUCCESS
 } from '../../types/index';
 import axios from '../../config/axios';
 
-export function getAllPosts() {
+export function getAllFollowingPosts() {
   return async dispatch => {
+    dispatch(getAllFollowingPosts_START());
+
+    try {
+      const posts = await axios.get('/api/p/posts');
+
+      dispatch(getAllFollowingPosts_SUCCESS(posts.data.posts));
+    } catch (error) {
+      console.error(error);
+      dispatch(getAllFollowingPosts_ERROR(error));
+    }
 
   };
-}
+};
+
+const getAllFollowingPosts_START = () => ({
+  type: GET_FOLLOWING_POSTS_START,
+  payload: true
+});
+
+const getAllFollowingPosts_SUCCESS = data => ({
+  type: GET_FOLLOWING_POSTS_SUCCESS,
+  payload: data
+});
+
+const getAllFollowingPosts_ERROR = error => ({
+  type: GET_FOLLOWING_POSTS_ERROR,
+  payload: error
+});
 
 export function createPost(formData) {
   return async dispatch => {
