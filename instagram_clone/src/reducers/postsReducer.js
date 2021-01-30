@@ -28,7 +28,8 @@ export default function (state = initialState, action) {
       return {
         ...state,
         posts: [action.payload, ...state.posts],
-        loading: false
+        loading: false,
+        uploadProgress: null
       }
 
     case CREATEPOST_ERROR:

@@ -5,6 +5,8 @@ import styled from '@emotion/styled';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { isImage, isVideo } from '../../../utils/fileExtension';
 
+import Spinner from '../../Spinner/spinner';
+
 import Rodal from 'rodal';
 import 'rodal/lib/rodal.css';
 
@@ -138,6 +140,7 @@ const Modal = () => {
 
   const dispatch = useDispatch();
   const showModal = useSelector(state => state.modal.showModal);
+  const isLoading = useSelector(state => state.post.loading);
   const [formData, setFormData] = useState({
     title: '',
     file: '',
@@ -176,10 +179,23 @@ const Modal = () => {
     event.preventDefault();
 
     if (isImage(formData.extension) || isVideo(formData.extension)) {
-      return dispatch(createPost({ title: formData.title, file: formData.file }));
+      return dispatch(createPost({ title: formData.title, file: formData.file }))
+        .then(() => {
+          dispatch(closeModal());
+          return handleCleanModalFormState();
+        });
     } else {
       return;
     }
+  };
+
+  const handleCleanModalFormState = () => {
+    setFormData({
+      title: '',
+      file: '',
+      extension: ''
+    });
+    setFileName('Seleccionar Archivo');
   };
 
   return (
@@ -225,6 +241,7 @@ const Modal = () => {
               &nbsp;<AiOutlineCloudUpload size="24 " />
             </SubmitButton>
           </div>
+          {isLoading ? <Spinner /> : null}
         </Form>
       </ModalContent>
     </Rodal>
