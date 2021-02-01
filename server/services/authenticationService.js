@@ -48,7 +48,6 @@ class Authentication {
     try {
       // const user = await this.userModel.findOne({ $or: [{ email: email }, { userName: email }] });
       const user = await this.userModel.findOne({ where: { email: email } });
-      console.log(`User find login: ${user}`)
       if (!user) {
         this.logger.error(`${email} was not found in the database`);
         throw new DatabaseError(404, "Unable to find the account.", "fail");

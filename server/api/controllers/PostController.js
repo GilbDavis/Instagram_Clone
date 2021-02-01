@@ -3,6 +3,7 @@ const { Photo, User, Follow, Comment, Like } = require('../../models');
 const AWS = require('aws-sdk');
 const logger = require('../../utils/logger');
 const config = require("../../config/configuration");
+const sequelize = require('sequelize');
 
 const CreatePostController = async (request, response, next) => {
   const thumbnail = request.file;
@@ -31,9 +32,11 @@ const getAllPostsController = async (request, response, next) => {
     const PostServiceInstance = new PostService({
       userModel: User,
       followModel: Follow,
-      photoModel: Photo,
+      likeModel: Like,
       commentModel: Comment,
-      likeModel: Like
+      photoModel: Photo,
+      sequelize: sequelize,
+      logger: logger
     });
 
     const posts = await PostServiceInstance.findAllFollowingPosts(request.user.id);

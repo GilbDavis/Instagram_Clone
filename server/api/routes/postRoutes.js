@@ -3,7 +3,7 @@ const route = express.Router();
 const { multerUpload } = require('../../utils/multerHelper');
 
 const validation = require('../../validation/validation');
-const { CreatePostController, getAllPostsController } = require('../controllers/PostController');
+const { CreatePostController, getAllPostsController, getAllLikesController } = require('../controllers/PostController');
 
 const isAuthenticated = require('../middlewares/isAuthenticated');
 
