@@ -123,8 +123,9 @@ export const PostImageContainer = styled.div`
 `;
 
 export const PostImage = styled.img`
-  width: 100%;
+  width: 614px;
   max-height: 100%;
+  max-width: 100%;
   height: 100%;
 `;
 
@@ -190,6 +191,43 @@ export const PostFooterActions = styled.div`
     }
   }
 `;
+
+export const PostFooterActionWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+export const PostFooterActionSpan = styled.span`
+  display: inline-block;
+
+  &:last-child {
+    transform: scaleX(-1);
+  }
+`;
+
+export const LikeButton = styled.button`
+  background: 0 0;
+  border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const CommentButton = styled(LikeButton)``;
+
+export const PostFooterSaveWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const SaveButton = styled(CommentButton)``;
 
 export const PostFooterLikes = styled.div`
   width: 100%;

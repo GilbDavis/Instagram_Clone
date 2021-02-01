@@ -7,14 +7,13 @@ import {
 import axios from '../../config/axios';
 import authenticateToken from '../../utils/authenticateToken';
 
-
 export function authenticateUser() {
   return async dispatch => {
     dispatch(authenticationStart());
 
     const authToken = localStorage.getItem('authToken');
     if (authToken) {
-      authenticateToken(authToken);
+      authenticateToken();
     } else {
       return dispatch(authenticateTokenNotExist());
     }

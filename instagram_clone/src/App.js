@@ -1,19 +1,12 @@
 import React from 'react';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
-import authenticateToken from './utils/authenticateToken';
-
 import Login from './pages/Login/index';
 import Home from './pages/Home/index';
 import Register from './pages/Signup/index';
 import PrivateRoute from './components/PrivateRoute';
 
 function App(props) {
-
-  const token = localStorage.getItem("authToken");
-  if (token) {
-    authenticateToken(token);
-  }
 
   return (
     <Router>

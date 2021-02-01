@@ -11,9 +11,12 @@ import formatDistance from 'date-fns/formatDistance';
 import format from 'date-fns/format';
 import { es } from 'date-fns/locale';
 
-import { getAllFollowingPosts } from '../../../actions/postsActions/postsActions';
+import { getAllPosts } from '../../../actions/postsActions/postsActions';
+import authenticateToken from '../../../utils/authenticateToken';
 
 import {
+  PostFooterActionWrapper,
+  PostFooterActionSpan,
   MainContainer,
   Post,
   PostFooter,
@@ -30,7 +33,11 @@ import {
   PostImage,
   PostImageContainer,
   PostsContainer,
-  PostsWrapper
+  PostsWrapper,
+  LikeButton,
+  CommentButton,
+  PostFooterSaveWrapper,
+  SaveButton
 } from './styles';
 
 const Posts = () => {
@@ -38,7 +45,8 @@ const Posts = () => {
   const posts = useSelector(state => state.post.posts);
 
   useEffect(() => {
-    dispatch(getAllFollowingPosts());
+    authenticateToken();
+    dispatch(getAllPosts());
   }, []);
 
   return (
@@ -68,33 +76,33 @@ const Posts = () => {
                 </PostHeaderOptions>
               </PostHeader>
               <PostImageContainer>
-                <PostImage src={post.postInfo.image_url} />
+                <PostImage src={post.postInfo.image_url} alt="thumbnail" />
               </PostImageContainer>
               <PostFooter>
                 <PostFooterActions>
-                  <div className="FirstActions">
-                    <span>
-                      <button type="button">
+                  <PostFooterActionWrapper>
+                    <PostFooterActionSpan>
+                      <LikeButton type="button">
                         <IoIosHeartEmpty size="28px" />
-                      </button>
-                    </span>
-                    <span>
-                      <button type="button">
+                      </LikeButton>
+                    </PostFooterActionSpan>
+                    <PostFooterActionSpan>
+                      <CommentButton type="button">
                         <BsChatDots size="26px" />
-                      </button>
-                    </span>
-                  </div>
-                  <div className="SecondActions">
-                    <span>
-                      <button type="button">
+                      </CommentButton>
+                    </PostFooterActionSpan>
+                  </PostFooterActionWrapper>
+                  <PostFooterSaveWrapper>
+                    <PostFooterActionSpan>
+                      <SaveButton type="SaveButton">
                         <VscBookmark size="26px" />
-                      </button>
-                    </span>
-                  </div>
+                      </SaveButton>
+                    </PostFooterActionSpan>
+                  </PostFooterSaveWrapper>
                 </PostFooterActions>
 
                 <PostFooterLikes>
-                  {(post.likes && post.likes.total > 0) ?
+                  {(Object.keys(post.likes).length > 0 && post.likes.total > 0) ?
                     <button type="button">
                       <span>{post.likes.total}</span>
                     &nbsp;Me gusta
@@ -118,7 +126,7 @@ const Posts = () => {
                 </PostFooterTitle>
 
                 {
-                  post.comments.length > 0 ?
+                  post.comments?.length > 0 ?
                     post.comments.length > 2 ?
                       <>
                         <PostFooterSeeComments><Link to="/">Ver los {post.comments.length} comentarios</Link></PostFooterSeeComments>

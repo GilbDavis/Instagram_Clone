@@ -9,7 +9,7 @@ import {
 } from '../../types/index';
 import axios from '../../config/axios';
 
-export function getAllFollowingPosts() {
+export function getAllPosts() {
   return async dispatch => {
     dispatch(getAllFollowingPosts_START());
 
@@ -18,10 +18,9 @@ export function getAllFollowingPosts() {
 
       dispatch(getAllFollowingPosts_SUCCESS(posts.data.posts));
     } catch (error) {
-      console.error(error);
-      dispatch(getAllFollowingPosts_ERROR(error));
+      console.error(error.response);
+      dispatch(getAllFollowingPosts_ERROR(error.response));
     }
-
   };
 };
 

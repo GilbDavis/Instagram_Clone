@@ -66,9 +66,7 @@ const Login = (props) => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem('authToken')) {
       dispatch(authenticateUser());
-    }
   }, []);
 
   useEffect(() => {
