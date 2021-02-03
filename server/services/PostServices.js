@@ -59,7 +59,7 @@ class PostService {
           image_url: createdPhotoObject.dataValues.image_url,
           createdAt: createdPhotoObject.dataValues.createdAt
         },
-        likes: {},
+        likes: { total: 0, updated: false },
         comments: {}
       };
     } catch (error) {
@@ -87,9 +87,13 @@ class PostService {
         throw new DatabaseError(500, 'Error while fetching follower data', 'error');
       }
 
+      // Add the user id at the end to get his own posts
+      const getOnlyIdsFromUsers = getUserFollowers.map(data => data.dataValues.id);
+      getOnlyIdsFromUsers.push(userId);
+
       const getPhotoIds = await this.photoModel.findAll({
         include: [{
-          model: this.userModel, as: 'User', where: { id: getUserFollowers.map(data => data.dataValues.id) }, attributes: ['id']
+          model: this.userModel, as: 'User', where: { id: getOnlyIdsFromUsers }, attributes: ['id']
         }],
         attributes: ['id']
       });
@@ -98,16 +102,12 @@ class PostService {
         throw new DatabaseError(500, 'An error occurred while fetching.', 'error');
       }
 
-      // Add the user id at the end to get his own posts
-      const getOnlyIdsFromUsers = getUserFollowers.map(data => data.dataValues.id);
-      getOnlyIdsFromUsers.push(userId);
-
       const getAllPostData = await this.photoModel.findAll({
         include: [{
           model: this.userModel, as: 'User', where: { id: getOnlyIdsFromUsers }, attributes: ['id', 'userName', 'profileImage']
         },
         {
-          model: this.likeModel, as: 'Likes', where: { UserId: getOnlyIdsFromUsers, PhotoId: getPhotoIds.map(data => data.dataValues.id) }, required: false, attributes: { include: ['UserId', [this.sequelize.fn('COUNT', this.sequelize.col('Likes.PhotoId')), 'total']] }
+          model: this.likeModel, as: 'Likes', where: { PhotoId: getPhotoIds.map(data => data.dataValues.id) }, required: false, attributes: { include: ['UserId', [this.sequelize.fn('COUNT', this.sequelize.col('Likes.PhotoId')), 'total']] }
         },
         {
           model: this.commentModel, as: 'Comments', where: { UserId: getOnlyIdsFromUsers, PhotoId: getPhotoIds.map(data => data.dataValues.id) }, required: false, attributes: ['id', 'comment_text']
@@ -126,20 +126,21 @@ class PostService {
       const getLikeTotal = await Promise.all(getAllPostData.map(el => {
         let photoId = el.dataValues.Likes[0]?.dataValues.PhotoId;
         if (photoId) {
-          const fetchPhotoCount = this.likeModel.count({ where: { PhotoId: photoId }, attributes: ['PhotoId', 'UserId'], group: ['Like.PhotoId', 'Like.UserId'] })
+          const fetchPhotoCount = this.likeModel.count({
+            where: { PhotoId: photoId },
+            attributes: ['PhotoId', 'UserId'],
+            group: ['Like.PhotoId', 'Like.UserId']
+          })
             .then(data => data)
             .catch(err => err);
-          // const test = [{ ...el.dataValues.Likes[0]?.dataValues, total: total }];
           return fetchPhotoCount;
         } else {
           return [];
         }
       }));
-      // console.log("PRobando uno dos tres: ", getLikeTotal)
 
       const formatPosts = getAllPostData.map((data, index) => {
         const totals = getLikeTotal[index];
-        console.log("totals: ", totals)
         return {
           owner: data.dataValues.User.dataValues,
           postInfo: data.dataValues,
@@ -156,6 +157,34 @@ class PostService {
       });
 
       return formatPosts;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async setLikeOrUnlike(photoId, userId) {
+    try {
+      const findLike = await this.likeModel.findOne({ where: { PhotoId: photoId, UserId: userId } });
+
+      if (!findLike) {
+        const createLike = await this.likeModel.create({
+          UserId: userId,
+          PhotoId: photoId
+        });
+
+        if (!createLike) {
+          throw new DatabaseError(500, "A database error occurred, please try again", 'fail');
+        }
+        return { exists: true, likePhotoId: photoId };
+      }
+
+      const deleteLike = await this.likeModel.destroy({ where: { UserId: userId, PhotoId: photoId } });
+
+      if (!deleteLike) {
+        throw new DatabaseError(500, "A database error occurred, please try again", 'fail');
+      }
+
+      return { exists: false, likePhotoId: photoId };
     } catch (error) {
       throw error;
     }

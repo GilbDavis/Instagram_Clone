@@ -3,7 +3,7 @@ const route = express.Router();
 const { multerUpload } = require('../../utils/multerHelper');
 
 const validation = require('../../validation/validation');
-const { CreatePostController, getAllPostsController, getAllLikesController } = require('../controllers/PostController');
+const { CreatePostController, getAllPostsController, getAllLikesController, handleSetLikeAndUnlike } = require('../controllers/PostController');
 
 const isAuthenticated = require('../middlewares/isAuthenticated');
 
@@ -11,5 +11,7 @@ const isAuthenticated = require('../middlewares/isAuthenticated');
 route.post("/upload", isAuthenticated, multerUpload.single('thumbnail'), CreatePostController);
 
 route.get('/posts', isAuthenticated, getAllPostsController);
+
+route.put('/like/:photoId', isAuthenticated, handleSetLikeAndUnlike);
 
 module.exports = route;

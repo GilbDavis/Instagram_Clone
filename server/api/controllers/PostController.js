@@ -47,7 +47,26 @@ const getAllPostsController = async (request, response, next) => {
   }
 };
 
+const handleSetLikeAndUnlike = async (request, response, next) => {
+
+  const { photoId } = request.params;
+  const userId = request.user.id;
+
+  try {
+    const PostServiceInstance = new PostService({
+      likeModel: Like,
+    });
+
+    const { exists, likePhotoId } = await PostServiceInstance.setLikeOrUnlike(photoId, userId);
+
+    return response.status(200).json({ status: 'success', exists, likePhotoId: parseInt(likePhotoId) })
+  } catch (error) {
+
+  }
+};
+
 module.exports = {
   CreatePostController,
-  getAllPostsController
+  getAllPostsController,
+  handleSetLikeAndUnlike
 };
