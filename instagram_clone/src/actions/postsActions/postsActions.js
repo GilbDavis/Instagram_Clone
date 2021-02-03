@@ -5,7 +5,7 @@ import {
   CREATEPOST_UPLOAD_PROGRESS,
   GET_FOLLOWING_POSTS_ERROR,
   GET_FOLLOWING_POSTS_START,
-  GET_FOLLOWING_POSTS_SUCCESS
+  GET_FOLLOWING_POSTS_SUCCESS,
 } from '../../types/index';
 import axios from '../../config/axios';
 
@@ -44,7 +44,6 @@ export function createPost(formData) {
     dispatch(createPost_START());
 
     try {
-
       const { title, file } = formData;
       const sendData = new FormData();
       sendData.append('title', title);

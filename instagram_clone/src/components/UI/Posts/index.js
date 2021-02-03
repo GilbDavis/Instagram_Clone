@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { BsThreeDots, BsChatDots } from 'react-icons/bs';
 import { VscBookmark } from 'react-icons/vsc';
-import { IoIosHeartEmpty } from 'react-icons/io';
+import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
 import { CgProfile } from 'react-icons/cg';
 
 import formatDistance from 'date-fns/formatDistance';
@@ -12,6 +12,7 @@ import format from 'date-fns/format';
 import { es } from 'date-fns/locale';
 
 import { getAllPosts } from '../../../actions/postsActions/postsActions';
+import { setLikeAndUnlike } from '../../../actions/postsActions/likesActions';
 import authenticateToken from '../../../utils/authenticateToken';
 
 import {
@@ -82,8 +83,10 @@ const Posts = () => {
                 <PostFooterActions>
                   <PostFooterActionWrapper>
                     <PostFooterActionSpan>
-                      <LikeButton type="button">
-                        <IoIosHeartEmpty size="28px" />
+                      <LikeButton type="button" onClick={() => dispatch(setLikeAndUnlike(post.postInfo.id))}>
+                        {post.likes.updated ? <IoIosHeart size="28px" color="red" /> :
+                          <IoIosHeartEmpty size="28px" />
+                        }
                       </LikeButton>
                     </PostFooterActionSpan>
                     <PostFooterActionSpan>
@@ -102,7 +105,7 @@ const Posts = () => {
                 </PostFooterActions>
 
                 <PostFooterLikes>
-                  {(Object.keys(post.likes).length > 0 && post.likes.total > 0) ?
+                  {post.likes.total > 0 ?
                     <button type="button">
                       <span>{post.likes.total}</span>
                     &nbsp;Me gusta

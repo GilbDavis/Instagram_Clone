@@ -5,7 +5,9 @@ import {
   CREATEPOST_UPLOAD_PROGRESS,
   GET_FOLLOWING_POSTS_START,
   GET_FOLLOWING_POSTS_ERROR,
-  GET_FOLLOWING_POSTS_SUCCESS
+  GET_FOLLOWING_POSTS_SUCCESS,
+  SET_POST_LIKE_ERROR,
+  SET_POST_LIKE_SUCCESS
 } from '../types/index';
 
 const initialState = {
@@ -49,6 +51,27 @@ export default function (state = initialState, action) {
         error: action.payload,
         loading: false,
         uploadProgress: null
+      }
+    case SET_POST_LIKE_SUCCESS:
+      const newPosts = [...state.posts];
+      const foundIndex = newPosts.findIndex(element => element.postInfo.id === action.payload.likePhotoId);
+      if (action.payload.exists === true) {
+        newPosts[foundIndex].likes.total += 1;
+        newPosts[foundIndex].likes.updated = true;
+      } else if (action.payload.exists === false) {
+        newPosts[foundIndex].likes.total -= 1;
+        newPosts[foundIndex].likes.updated = false;
+      }
+
+      return {
+        ...state,
+        posts: newPosts,
+        error: null
+      }
+    case SET_POST_LIKE_ERROR:
+      return {
+        ...state,
+        error: action.payload
       }
     default:
       return state;
