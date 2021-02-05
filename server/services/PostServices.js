@@ -102,6 +102,17 @@ class PostService {
         throw new DatabaseError(500, 'An error occurred while fetching.', 'error');
       }
 
+      const getCommentsIds = await this.commentModel.findAll({
+        include: [{
+          model: this.userModel, as: "User", where: { id: getOnlyIdsFromUsers }, attributes: ['id', 'userName']
+        }],
+        attributes: ['id']
+      });
+
+      if (!getCommentsIds) {
+        throw new DatabaseError(500, "An error occurred while fetching the posts, please try again", 'fail');
+      }
+
       const getAllPostData = await this.photoModel.findAll({
         include: [{
           model: this.userModel, as: 'User', where: { id: getOnlyIdsFromUsers }, attributes: ['id', 'userName', 'profileImage']
@@ -110,7 +121,7 @@ class PostService {
           model: this.likeModel, as: 'Likes', where: { PhotoId: getPhotoIds.map(data => data.dataValues.id) }, required: false, attributes: { include: ['UserId', [this.sequelize.fn('COUNT', this.sequelize.col('Likes.PhotoId')), 'total']] }
         },
         {
-          model: this.commentModel, as: 'Comments', where: { UserId: getOnlyIdsFromUsers, PhotoId: getPhotoIds.map(data => data.dataValues.id) }, required: false, attributes: ['id', 'comment_text']
+          model: this.commentModel, as: 'Comments', where: { id: getCommentsIds.map(data => data.dataValues.id) }, required: false, attributes: ['id', 'comment_text', 'UserId'], order: ['createdAt', 'DESC']
         }
         ],
         order: [
@@ -119,6 +130,7 @@ class PostService {
         attributes: { exclude: ['UserId'] },
         group: ['Photo.id', 'User.id', 'Likes.PhotoId', 'Likes.UserId', 'Comments.UserId', 'Comments.PhotoId', 'Comments.id']
       });
+
       if (!getAllPostData) {
         throw new DatabaseError(500, "Records werent found!", 'error');
       }
@@ -139,13 +151,33 @@ class PostService {
         }
       }));
 
+      const getPostsCommentsData = await Promise.all(getAllPostData.map(data => {
+        let userId = data.dataValues.Comments.map(comment => comment.UserId);
+        let commentId = data.dataValues.Comments.map(comment => comment.id);
+        if (userId) {
+          const fetchUserName = this.userModel.findAll({
+            where: { id: userId },
+            raw: true,
+            attributes: ['id', 'userName'],
+            include: [{ model: this.commentModel, as: 'Comments', required: false, where: { id: commentId }, order: ['createdAt', 'DESC'] }]
+          })
+            .then(data => data)
+            .catch(err => new DatabaseError(500, "An error occurred while fetching posts, please try again", 'fail'));
+          return fetchUserName
+        } else {
+          return [];
+        }
+      }));
+
+
       const formatPosts = getAllPostData.map((data, index) => {
         const totals = getLikeTotal[index];
+        const comments = getPostsCommentsData[index];
         return {
           owner: data.dataValues.User.dataValues,
           postInfo: data.dataValues,
           likes: totals.length <= 0 ? { total: 0, updated: false } : { total: totals.length, updated: totals.find(data => { if (data.UserId === userId) { return true } else { return false } }) ? true : false },
-          comments: data.dataValues.Comments.length === 0 ? {} : data.dataValues.Comments.dataValues
+          comments: comments.length <= 0 ? [] : comments.map(data => ({ commentId: data['Comments.id'], commentText: data['Comments.comment_text'], owner: data.userName }))
         };
       });
       /* Delete the extra User, Likes and Comments object from postInfo 

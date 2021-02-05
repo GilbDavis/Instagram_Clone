@@ -55,6 +55,7 @@ const handleSetLikeAndUnlike = async (request, response, next) => {
   try {
     const PostServiceInstance = new PostService({
       likeModel: Like,
+      logger
     });
 
     const { exists, likePhotoId } = await PostServiceInstance.setLikeOrUnlike(photoId, userId);
