@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -38,17 +38,30 @@ import {
   LikeButton,
   CommentButton,
   PostFooterSaveWrapper,
-  SaveButton
+  SaveButton,
+  PostFooterCommentSection,
+  PostFooterCommentContainer,
+  PostFooterCommentForm,
+  PostFooterCommentTextArea,
+  PostFooterCommentSubmit
 } from './styles';
 
 const Posts = () => {
   const dispatch = useDispatch();
   const posts = useSelector(state => state.post.posts);
+  const [comment, setComment] = useState([]);
 
   useEffect(() => {
     authenticateToken();
     dispatch(getAllPosts());
   }, []);
+
+  const handleCommentOnChange = (event, postId) => {
+    setComment({
+      ...comment,
+      [postId]: event.target.value
+    });
+  };
 
   return (
     <MainContainer>
@@ -129,22 +142,22 @@ const Posts = () => {
                 </PostFooterTitle>
 
                 {
-                  post.comments?.length > 0 ?
+                  post.comments.length > 0 ?
                     post.comments.length > 2 ?
                       <>
                         <PostFooterSeeComments><Link to="/">Ver los {post.comments.length} comentarios</Link></PostFooterSeeComments>
                         {post.comments.slice(-2).map(comment => (
-                          <PostFooterComments key={comment.owner.userId}>
-                            <span><Link to={`/${comment.owner.userName}`}>{comment.owner.userName}</Link></span>
-                            <span>&nbsp;{comment.commentInfo.comment}</span>
+                          <PostFooterComments key={comment.commentId}>
+                            <span><Link to={`/${comment.owner}`}>{comment.owner}</Link></span>
+                            <span>&nbsp;{comment.commentText}</span>
                           </PostFooterComments>
                         ))}
                       </>
                       :
                       post.comments.map(comment => (
-                        <PostFooterComments key={comment.owner.userId}>
-                          <span><Link to={`/${comment.owner.userName}`}>{comment.owner.userName}</Link></span>
-                          <span>&nbsp;{comment.commetInfo.comment}</span>
+                        <PostFooterComments key={comment.commentId}>
+                          <span><Link to={`/${comment.owner}`}>{comment.owner}</Link></span>
+                          <span>&nbsp;{comment.commetText}</span>
                         </PostFooterComments>
                       ))
                     :
@@ -158,6 +171,20 @@ const Posts = () => {
                     </time>
                   </Link>
                 </PostFooterTimer>
+
+                <PostFooterCommentSection>
+                  <PostFooterCommentContainer>
+                    <PostFooterCommentForm onSubmit={() => console.log('submited')}>
+                      <PostFooterCommentTextArea
+                        placeholder="Añade un comentario..."
+                        autoComplete="off"
+                        onChange={(event) => handleCommentOnChange(event, post.postInfo.id)}
+                        value={comment[post.postInfo.id]}
+                      />
+                      <PostFooterCommentSubmit type="submit">Publicar</PostFooterCommentSubmit>
+                    </PostFooterCommentForm>
+                  </PostFooterCommentContainer>
+                </PostFooterCommentSection>
               </PostFooter>
             </Post>
           ))}

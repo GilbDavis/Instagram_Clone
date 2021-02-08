@@ -318,3 +318,48 @@ export const PostFooterTimer = styled.div`
     color: #8e8e8e;
   }
 `;
+
+export const PostFooterCommentSection = styled.section`
+  width: 100%;
+  border-top: 1px solid #efefef;
+  min-height: 56px;
+  display :flex;
+  align-items: center;
+`;
+
+export const PostFooterCommentContainer = styled.div`
+  width: 100%;
+  padding: 0 1.6rem;
+`;
+
+export const PostFooterCommentForm = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const PostFooterCommentTextArea = styled.textarea`
+  resize: none; 
+  width: 100%;
+  height: 18px;
+  max-height: 80px;
+  font-size: inherit;
+  background: 0 0;
+  border: none;
+  outline: none;
+  overflow: hidden;
+`;
+
+export const PostFooterCommentSubmit = styled.button`
+  border: none;
+  outline: none;
+  background: 0 0;
+  color: #0095f6;
+  font-size: 1.3rem;
+  font-weight: bold;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
