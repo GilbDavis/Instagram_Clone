@@ -221,6 +221,33 @@ class PostService {
       throw error;
     }
   }
+
+  async addComment(photoId, userId, comment) {
+    try {
+      const createdComment = await this.commentModel.create({
+        comment_text: comment,
+        UserId: userId,
+        PhotoId: photoId
+      });
+      if (!createdComment) {
+        throw new DatabaseError(500, "Unable to create the comment, please try again", 'error');
+      }
+
+      const findCommentOwner = await this.userModel.findByPk(userId, { attributes: ['userName'] });
+      if (!findCommentOwner) {
+        throw new DatabaseError(500, "Unable to find comment owner, please try again", 'error');
+      }
+
+      return {
+        commentId: createdComment.id,
+        commentText: createdComment.comment_text,
+        owner: findCommentOwner.userName,
+        photoId: createdComment.PhotoId
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = PostService;

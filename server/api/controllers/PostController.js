@@ -66,8 +66,30 @@ const handleSetLikeAndUnlike = async (request, response, next) => {
   }
 };
 
+const createPostComment = async (request, response, next) => {
+
+  const { photoId } = request.params;
+  const userId = request.user.id;
+  const { comment } = request.body;
+
+  try {
+    const PostServiceInstance = new PostService({
+      commentModel: Comment,
+      userModel: User,
+      logger: logger
+    });
+
+    const commentData = await PostServiceInstance.addComment(photoId, userId, comment);
+
+    return response.status(201).json({ status: 'success', comment: commentData });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   CreatePostController,
   getAllPostsController,
-  handleSetLikeAndUnlike
+  handleSetLikeAndUnlike,
+  createPostComment
 };
