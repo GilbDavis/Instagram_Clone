@@ -7,7 +7,9 @@ import {
   GET_FOLLOWING_POSTS_ERROR,
   GET_FOLLOWING_POSTS_SUCCESS,
   SET_POST_LIKE_ERROR,
-  SET_POST_LIKE_SUCCESS
+  SET_POST_LIKE_SUCCESS,
+  SET_POST_COMMENT_ERROR,
+  SET_POST_COMMENT_SUCCESS
 } from '../types/index';
 
 const initialState = {
@@ -69,9 +71,23 @@ export default function (state = initialState, action) {
         error: null
       }
     case SET_POST_LIKE_ERROR:
+    case SET_POST_COMMENT_ERROR:
       return {
         ...state,
         error: action.payload
+      }
+    case SET_POST_COMMENT_SUCCESS:
+      const postsCopy = [...state.posts];
+      const index = postsCopy.findIndex(element => element.postInfo.id === action.payload.photoId);
+      postsCopy[index].comments.push({
+        commentId: action.payload.commentId,
+        commentText: action.payload.commentText,
+        owner: action.payload.owner
+      });
+
+      return {
+        ...state,
+        posts: postsCopy
       }
     default:
       return state;

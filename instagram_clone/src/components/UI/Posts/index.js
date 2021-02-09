@@ -12,6 +12,7 @@ import format from 'date-fns/format';
 import { es } from 'date-fns/locale';
 
 import { getAllPosts } from '../../../actions/postsActions/postsActions';
+import { addCommentAction } from '../../../actions/postsActions/commentActions';
 import { setLikeAndUnlike } from '../../../actions/postsActions/likesActions';
 import authenticateToken from '../../../utils/authenticateToken';
 
@@ -157,7 +158,7 @@ const Posts = () => {
                       post.comments.map(comment => (
                         <PostFooterComments key={comment.commentId}>
                           <span><Link to={`/${comment.owner}`}>{comment.owner}</Link></span>
-                          <span>&nbsp;{comment.commetText}</span>
+                          <span>&nbsp;{comment.commentText}</span>
                         </PostFooterComments>
                       ))
                     :
@@ -174,7 +175,10 @@ const Posts = () => {
 
                 <PostFooterCommentSection>
                   <PostFooterCommentContainer>
-                    <PostFooterCommentForm onSubmit={() => console.log('submited')}>
+                    <PostFooterCommentForm onSubmit={(e) => {
+                      e.preventDefault();
+                      dispatch(addCommentAction(post.postInfo.id, comment[post.postInfo.id]));
+                    }}>
                       <PostFooterCommentTextArea
                         placeholder="Añade un comentario..."
                         autoComplete="off"
