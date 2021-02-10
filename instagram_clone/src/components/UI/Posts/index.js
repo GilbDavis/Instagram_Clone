@@ -64,6 +64,14 @@ const Posts = () => {
     });
   };
 
+  const handleInputAutoResize = (element, defaultHeight) => {
+    if (element) {
+      const target = element.target ? element.target : element;
+      target.style.height = defaultHeight;
+      target.style.height = `${target.scrollHeight}px`;
+    }
+  };
+
   return (
     <MainContainer>
       <PostsWrapper>
@@ -182,7 +190,11 @@ const Posts = () => {
                       <PostFooterCommentTextArea
                         placeholder="Añade un comentario..."
                         autoComplete="off"
-                        onChange={(event) => handleCommentOnChange(event, post.postInfo.id)}
+                        maxLength={255}
+                        onChange={(event) => {
+                          handleCommentOnChange(event, post.postInfo.id);
+                          handleInputAutoResize(event, '18px');
+                        }}
                         value={comment[post.postInfo.id]}
                       />
                       <PostFooterCommentSubmit type="submit">Publicar</PostFooterCommentSubmit>
