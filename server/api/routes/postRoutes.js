@@ -1,13 +1,12 @@
 const express = require("express");
 const route = express.Router();
 const { multerUpload } = require('../../utils/multerHelper');
-
-const validation = require('../../validation/validation');
 const {
   CreatePostController,
   getAllPostsController,
-  handleSetLikeAndUnlike,
-  createPostComment
+  handleSetLikeAndUnlikeController,
+  createPostCommentController,
+  getAllExplorePostsController
 } = require('../controllers/PostController');
 
 const isAuthenticated = require('../middlewares/isAuthenticated');
@@ -17,8 +16,10 @@ route.post("/upload", isAuthenticated, multerUpload.single('thumbnail'), CreateP
 
 route.get('/posts', isAuthenticated, getAllPostsController);
 
-route.put('/like/:photoId', isAuthenticated, handleSetLikeAndUnlike);
+route.put('/like/:photoId', isAuthenticated, handleSetLikeAndUnlikeController);
 
-route.post('/comment/:photoId', isAuthenticated, createPostComment);
+route.post('/comment/:photoId', isAuthenticated, createPostCommentController);
+
+route.get("/explore", isAuthenticated, getAllExplorePostsController);
 
 module.exports = route;

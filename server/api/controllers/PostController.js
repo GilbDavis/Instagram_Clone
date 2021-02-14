@@ -47,7 +47,7 @@ const getAllPostsController = async (request, response, next) => {
   }
 };
 
-const handleSetLikeAndUnlike = async (request, response, next) => {
+const handleSetLikeAndUnlikeController = async (request, response, next) => {
 
   const { photoId } = request.params;
   const userId = request.user.id;
@@ -66,7 +66,7 @@ const handleSetLikeAndUnlike = async (request, response, next) => {
   }
 };
 
-const createPostComment = async (request, response, next) => {
+const createPostCommentController = async (request, response, next) => {
 
   const { photoId } = request.params;
   const userId = request.user.id;
@@ -87,9 +87,32 @@ const createPostComment = async (request, response, next) => {
   }
 };
 
+const getAllExplorePostsController = async (request, response, next) => {
+  const userId = request.user.id;
+
+  try {
+    const PostServiceInstance = new PostService({
+      userModel: User,
+      followModel: Follow,
+      likeModel: Like,
+      commentModel: Comment,
+      photoModel: Photo,
+      sequelize: sequelize,
+      logger: logger
+    });
+
+    const data = await PostServiceInstance.getAllExplorePosts(userId);
+
+    return response.status(200).json({ status: 'success', posts: data });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   CreatePostController,
   getAllPostsController,
-  handleSetLikeAndUnlike,
-  createPostComment
+  handleSetLikeAndUnlikeController,
+  createPostCommentController,
+  getAllExplorePostsController
 };
