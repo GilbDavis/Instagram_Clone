@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.div`
   width: 100%;
@@ -49,13 +49,49 @@ export const NavLinksContainer = styled.ul`
   list-style-type: none;
 `;
 
-export const NavLink = styled(Link)`
+export const NavigationLink = styled(NavLink)`
   height: 100%;
   font-weight: normal;
   font-size: 2.6rem;
   text-decoration: none;
   color: inherit;
   margin-left: ${props => props.marginleft ? props.marginleft : 0};
+
+  &:first-of-type .Icon {
+    color: white;
+    stroke: black;
+    stroke-width: 50;
+  }
+
+  &:nth-of-type(2) .Icon {
+    color: white;
+    stroke: black;
+    stroke-width: 25;
+  }
+
+  &:nth-of-type(3) .Icon {
+    color: white;
+    stroke: black;
+    stroke-width: 1;
+  }
+
+  &:nth-of-type(4) .Icon {
+    color: white;
+    stroke: black;
+    stroke-width: 50;
+  }
+
+  &:nth-of-type(5) .Icon {
+    color: white;
+    stroke: black;
+    stroke-width: 1;
+  }
+
+  &.is-active .Icon {
+    color: black;
+    stroke: initial;
+    stroke-width: 0;
+  }
 `;
 
 export const CreatePostButton = styled.button`

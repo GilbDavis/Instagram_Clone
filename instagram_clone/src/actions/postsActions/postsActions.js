@@ -6,6 +6,9 @@ import {
   GET_FOLLOWING_POSTS_ERROR,
   GET_FOLLOWING_POSTS_START,
   GET_FOLLOWING_POSTS_SUCCESS,
+  GET_EXPLORE_POSTS_ERROR,
+  GET_EXPLORE_POSTS_START,
+  GET_EXPLORE_POSTS_SUCCESS
 } from '../../types/index';
 import axios from '../../config/axios';
 
@@ -84,4 +87,33 @@ const uploadingProgress = progress => ({
 
 const createPost_Error = () => ({
   type: CREATEPOST_ERROR
+});
+
+export function getAllExplorePosts() {
+  return async dispatch => {
+    try {
+      dispatch(getAllExplorePosts_START());
+
+      const explorePostsData = await axios.get('/api/p/explore');
+
+      dispatch(getAllExplorePosts_SUCCESS(explorePostsData.data.posts));
+    } catch (error) {
+      dispatch(getAllExplorePosts_ERROR(error.response.data));
+    }
+  };
+};
+
+const getAllExplorePosts_START = () => ({
+  type: GET_EXPLORE_POSTS_START,
+  payload: true
+});
+
+const getAllExplorePosts_SUCCESS = data => ({
+  type: GET_EXPLORE_POSTS_SUCCESS,
+  payload: data
+});
+
+const getAllExplorePosts_ERROR = error => ({
+  type: GET_EXPLORE_POSTS_ERROR,
+  payload: error
 });

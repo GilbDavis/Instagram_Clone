@@ -9,11 +9,15 @@ import {
   SET_POST_LIKE_ERROR,
   SET_POST_LIKE_SUCCESS,
   SET_POST_COMMENT_ERROR,
-  SET_POST_COMMENT_SUCCESS
+  SET_POST_COMMENT_SUCCESS,
+  GET_EXPLORE_POSTS_ERROR,
+  GET_EXPLORE_POSTS_START,
+  GET_EXPLORE_POSTS_SUCCESS
 } from '../types/index';
 
 const initialState = {
   posts: [],
+  explorePosts: [],
   loading: false,
   error: null,
   uploadProgress: null
@@ -28,6 +32,7 @@ export default function (state = initialState, action) {
       }
     case CREATEPOST_START:
     case GET_FOLLOWING_POSTS_START:
+    case GET_EXPLORE_POSTS_START:
       return {
         ...state,
         loading: action.payload
@@ -48,6 +53,7 @@ export default function (state = initialState, action) {
       }
     case CREATEPOST_ERROR:
     case GET_FOLLOWING_POSTS_ERROR:
+    case GET_EXPLORE_POSTS_ERROR:
       return {
         ...state,
         error: action.payload,
@@ -74,7 +80,8 @@ export default function (state = initialState, action) {
     case SET_POST_COMMENT_ERROR:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
+        loading: false
       }
     case SET_POST_COMMENT_SUCCESS:
       const postsCopy = [...state.posts];
@@ -87,7 +94,17 @@ export default function (state = initialState, action) {
 
       return {
         ...state,
-        posts: postsCopy
+        posts: postsCopy,
+        error: null,
+        loading: false
+      }
+    case GET_EXPLORE_POSTS_SUCCESS:
+      return {
+        ...state,
+        explorePosts: action.payload,
+        loading: false,
+        uploadingProgress: null,
+        error: null
       }
     default:
       return state;

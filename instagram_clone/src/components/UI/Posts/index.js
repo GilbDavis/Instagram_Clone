@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { BsThreeDots, BsChatDots } from 'react-icons/bs';
 import { VscBookmark } from 'react-icons/vsc';
@@ -11,10 +11,8 @@ import formatDistance from 'date-fns/formatDistance';
 import format from 'date-fns/format';
 import { es } from 'date-fns/locale';
 
-import { getAllPosts } from '../../../actions/postsActions/postsActions';
 import { addCommentAction } from '../../../actions/postsActions/commentActions';
 import { setLikeAndUnlike } from '../../../actions/postsActions/likesActions';
-import authenticateToken from '../../../utils/authenticateToken';
 
 import {
   PostFooterActionWrapper,
@@ -47,15 +45,10 @@ import {
   PostFooterCommentSubmit
 } from './styles';
 
-const Posts = () => {
+const Posts = ({ posts }) => {
   const dispatch = useDispatch();
-  const posts = useSelector(state => state.post.posts);
   const [comment, setComment] = useState([]);
-
-  useEffect(() => {
-    authenticateToken();
-    dispatch(getAllPosts());
-  }, []);
+  const textAreaRef = useRef([]);
 
   const handleCommentOnChange = (event, postId) => {
     setComment({
@@ -70,6 +63,10 @@ const Posts = () => {
       target.style.height = defaultHeight;
       target.style.height = `${target.scrollHeight}px`;
     }
+  };
+
+  const handleCommentIcon = (postId) => {
+    textAreaRef.current[postId].focus();
   };
 
   return (
@@ -99,7 +96,11 @@ const Posts = () => {
                 </PostHeaderOptions>
               </PostHeader>
               <PostImageContainer>
-                <PostImage src={post.postInfo.image_url} alt="thumbnail" />
+                <PostImage
+                  src={post.postInfo.image_url}
+                  alt="thumbnail"
+                  onDoubleClick={() => dispatch(setLikeAndUnlike(post.postInfo.id))}
+                />
               </PostImageContainer>
               <PostFooter>
                 <PostFooterActions>
@@ -112,7 +113,8 @@ const Posts = () => {
                       </LikeButton>
                     </PostFooterActionSpan>
                     <PostFooterActionSpan>
-                      <CommentButton type="button">
+                      <CommentButton type="button"
+                        onClick={() => handleCommentIcon(post.postInfo.id)}>
                         <BsChatDots size="26px" />
                       </CommentButton>
                     </PostFooterActionSpan>
@@ -188,6 +190,7 @@ const Posts = () => {
                       dispatch(addCommentAction(post.postInfo.id, comment[post.postInfo.id]));
                     }}>
                       <PostFooterCommentTextArea
+                        ref={ref => textAreaRef.current[post.postInfo.id] = ref}
                         placeholder="Añade un comentario..."
                         autoComplete="off"
                         maxLength={255}
