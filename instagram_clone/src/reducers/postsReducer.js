@@ -103,7 +103,6 @@ export default function (state = initialState, action) {
         ...state,
         explorePosts: action.payload,
         loading: false,
-        uploadingProgress: null,
         error: null
       }
     default:
