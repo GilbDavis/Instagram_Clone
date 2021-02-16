@@ -1,6 +1,6 @@
-# **Instagram Clone** (In progress)
+# **Instagram Clone** (In progress - 70%)
 
-Instagram Clone is a side project which has been developed to learn how to use Redux and to showcase my Full Stack skills with technologies like React, PostgreSQL, SCSS, etc.
+Instagram Clone is a side project which has been developed to learn how to use Redux and to showcase my Full Stack skills with technologies like React, PostgreSQL, SCSS, styled components, etc.
 
 # Installation
 
