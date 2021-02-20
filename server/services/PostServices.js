@@ -373,6 +373,74 @@ class PostService {
       throw error;
     }
   }
+
+  async getSinglePost(postId, userId) {
+    try {
+      const getPhotoData = await this.photoModel.findOne({ where: { id: postId } });
+
+      if (!getPhotoData) {
+        throw DatabaseError(500, 'Unable to fetch data. Please try again', 'error');
+      }
+
+      const getAllPostData = await this.photoModel.findOne({
+        where: { id: postId },
+        include: [{
+          model: this.userModel, as: 'User', where: { id: getPhotoData.dataValues.UserId }, attributes: ['id', 'userName', 'profileImage']
+        },
+        {
+          model: this.likeModel, as: 'Likes', where: { PhotoId: getPhotoData.dataValues.id }, required: false, attributes: { include: ['UserId', [this.sequelize.fn('COUNT', this.sequelize.col('Likes.PhotoId')), 'total']] }
+        },
+        {
+          model: this.commentModel, as: 'Comments', where: { PhotoId: getPhotoData.dataValues.id }, required: false, attributes: ['id', 'comment_text', 'UserId'], order: ['createdAt', 'DESC']
+        }
+        ],
+        order: [
+          ['createdAt', 'DESC']
+        ],
+        attributes: { exclude: ['UserId'] },
+        group: ['Photo.id', 'User.id', 'Likes.PhotoId', 'Likes.UserId', 'Comments.UserId', 'Comments.PhotoId', 'Comments.id']
+      });
+
+      if (!getAllPostData) {
+        throw new DatabaseError(500, "Records werent found!", 'error');
+      }
+
+      const getPostsCommentsData = await Promise.all(getAllPostData.dataValues.Comments.map(data => {
+        let userId = data.dataValues.UserId;
+        let commentId = data.dataValues.id;
+        if (userId) {
+          const fetchUserName = this.userModel.findAll({
+            where: { id: userId },
+            raw: true,
+            attributes: ['id', 'userName'],
+            include: [{ model: this.commentModel, as: 'Comments', required: false, where: { id: commentId }, order: ['createdAt', 'DESC'] }]
+          })
+            .then(data => data)
+            .catch(err => new DatabaseError(500, "An error occurred while fetching posts, please try again", 'fail'));
+          return fetchUserName
+        } else {
+          return [];
+        }
+      }));
+
+      const formatPosts = () => {
+        return {
+          owner: getAllPostData.dataValues.User.dataValues,
+          postInfo: {
+            id: getAllPostData.dataValues.id,
+            title: getAllPostData.dataValues.title,
+            image_url: getAllPostData.dataValues.image_url
+          },
+          likes: getAllPostData.dataValues.Likes.length <= 0 ? { total: 0, updated: false } : { total: getAllPostData.dataValues.Likes.length, updated: getAllPostData.dataValues.Likes.find(data => { if (data.UserId === userId) { return true } else { return false } }) ? true : false },
+          comments: getPostsCommentsData.length <= 0 ? [] : getPostsCommentsData.map(data => ({ commentId: data[0]['Comments.id'], commentText: data[0]['Comments.comment_text'], owner: data[0].userName }))
+        };
+      };
+
+      return formatPosts();
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = PostService;

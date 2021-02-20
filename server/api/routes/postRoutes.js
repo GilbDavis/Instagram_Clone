@@ -6,7 +6,8 @@ const {
   getAllPostsController,
   handleSetLikeAndUnlikeController,
   createPostCommentController,
-  getAllExplorePostsController
+  getAllExplorePostsController,
+  getSinglePostController
 } = require('../controllers/PostController');
 
 const isAuthenticated = require('../middlewares/isAuthenticated');
@@ -21,5 +22,7 @@ route.put('/like/:photoId', isAuthenticated, handleSetLikeAndUnlikeController);
 route.post('/comment/:photoId', isAuthenticated, createPostCommentController);
 
 route.get("/explore", isAuthenticated, getAllExplorePostsController);
+
+route.get("/:postId", isAuthenticated, getSinglePostController);
 
 module.exports = route;
